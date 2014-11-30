@@ -557,8 +557,9 @@ bool OTPatternVideoHangout::setSpeaker( std::string spkr ) {
 				return true;
 			}
 		}
-		OT_DEBUG_WARN( "Setting speaker to", spkr );
 	}
+
+	OT_DEBUG_WARN( "setSpeaker has changed" );
 
 	return false;
 }
