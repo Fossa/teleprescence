@@ -29,6 +29,9 @@ int Y = (int)(R *  .299000 + G *  .587000 + B *  0.114000);
 int U = (int)(R * -.168736 + G * -.331264 + B *  0.500000 + 128);
 int V = (int)(R *  .500000 + G * -.418688 + B * -0.081312 + 128);
 */
+#define Y_GREY	56
+#define U_GREY	128
+#define	V_GREY	128
 #define Y_BLUE	29
 #define U_BLUE	255
 #define V_BLUE	107
@@ -326,14 +329,14 @@ static void _mixListener(
 		const int pnFrameMixLines[3] = { nRectWidth, nRectWidth >> 1, nRectWidth >> 1 };
 
 		// top border
-		memset(pMixFrame->data[0], Y, pnFrameMixLines[0]);
-		memset(pMixFrame->data[1], U, pnFrameMixLines[1]);
-		memset(pMixFrame->data[2], V, pnFrameMixLines[2]);
+		//memset(pMixFrame->data[0], Y, pnFrameMixLines[0]);
+		//memset(pMixFrame->data[1], U, pnFrameMixLines[1]);
+		//memset(pMixFrame->data[2], V, pnFrameMixLines[2]);
 #if 0
 		// bottom border
-		memset(pMixFrame->data[0] + ((nRectWidth - 1) * pMixFrame->linesize[0]), Y, pnFrameMixLines[0]);
-		memset(pMixFrame->data[1] + (((nRectWidth - 1) >> 1) * pMixFrame->linesize[1]), U, pnFrameMixLines[1]);
-		memset(pMixFrame->data[2] + (((nRectWidth - 1) >> 1) * pMixFrame->linesize[2]), V, pnFrameMixLines[2]);
+		//memset(pMixFrame->data[0] + ((nRectWidth - 1) * pMixFrame->linesize[0]), Y, pnFrameMixLines[0]);
+		//memset(pMixFrame->data[1] + (((nRectWidth - 1) >> 1) * pMixFrame->linesize[1]), U, pnFrameMixLines[1]);
+		//memset(pMixFrame->data[2] + (((nRectWidth - 1) >> 1) * pMixFrame->linesize[2]), V, pnFrameMixLines[2]);
 #endif
 	}
 
@@ -427,10 +430,16 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			m_pFrameMix->format = PIX_FMT_YUV420P;
 
 			// fill with white
-			memset(m_pFrameMix->data[0], Y_WHITE, (m_pFrameMix->linesize[0] * nHeight));
-			memset(m_pFrameMix->data[1], U_WHITE, (m_pFrameMix->linesize[1] * (nHeight >> 1)));
-			memset(m_pFrameMix->data[2], V_WHITE, (m_pFrameMix->linesize[2] * (nHeight >> 1)));
-
+			//***
+			//memset(m_pFrameMix->data[0], Y_WHITE, (m_pFrameMix->linesize[0] * nHeight));
+			//memset(m_pFrameMix->data[1], U_WHITE, (m_pFrameMix->linesize[1] * (nHeight >> 1)));
+			//memset(m_pFrameMix->data[2], V_WHITE, (m_pFrameMix->linesize[2] * (nHeight >> 1)));
+			//***
+			//OUR EDIT
+			memset(m_pFrameMix->data[0], Y_GREY, (m_pFrameMix->linesize[0] * nHeight));
+			memset(m_pFrameMix->data[1], U_GREY, (m_pFrameMix->linesize[1] * (nHeight >> 1)));
+			memset(m_pFrameMix->data[2], V_GREY, (m_pFrameMix->linesize[2] * (nHeight >> 1)));
+			//OUR EDIT END
 			m_oLastMixedFrameResult = OTFrameVideo::New(false, *ppDstBuffer, *pDstBufferSize);
 			m_oLastMixedFrameResult->setWidth(nWidth);
 			m_oLastMixedFrameResult->setHeight(nHeight);
