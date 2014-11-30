@@ -552,8 +552,8 @@ bool OTPatternVideoHangout::setSpeaker( std::string spkr ) {
 		// Loop through the consumers and try to find the name, if they match set him to speaker
 		for( iter = _consumers->begin() ; iter != _consumers->end() ; iter++ ) {
 			oSessionInfo = dynamic_cast<OTSessionInfoAV*>(*(*iter).second->getSessionInfo());
-			if( oSessionInfo->getSessionInfo()->getDisplayName() == spkr ) {
-				oSessionInfo->getSessionInfo()->setSpeaker( true );
+			if( (*iter).second->getSessionInfo()->getDisplayName() == spkr ) {
+				(*iter).second->getSessionInfo()->setSpeaker( true );
 				return true;
 			}
 		}
