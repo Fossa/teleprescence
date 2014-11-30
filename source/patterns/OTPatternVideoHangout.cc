@@ -570,8 +570,8 @@ OTObjectWrapper<OTPatternVideoHangout*> OTPatternVideoHangout::New(OTObjectWrapp
 }
 
 //***
-bool OTPatternVideoHangout::setSpeaker( std::string spkr ) : consumersSpeaker( spkr ) {
-
+bool OTPatternVideoHangout::setSpeaker( std::string spkr ) {
+	consumersSpeaker = spkr;
 	OTObjectWrapper<OTSessionInfoAV*> oSessionInfo;
 	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> >::iterator iter;
 	if( !_consumers ) {
