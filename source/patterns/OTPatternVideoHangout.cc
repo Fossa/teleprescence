@@ -439,7 +439,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 
 		// If one user has entered or left the conversation the layout has changed
 		if( consumersCount != nConsumers ) {
-			OT_WARN( "One user has joined or left" );
+			OT_DEBUG_WARN( "One user has joined or left" );
 			// layout changed
 			consumersVector.empty();
 
@@ -456,7 +456,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		{
 			//***
 			// Check if the speaker has changed, then we need to inform that the layout needs to change
-			OT_WARN( "Speaker has changed in mix " );
+			OT_DEBUG_WARN( "Speaker has changed in mix " );
 			if( consumersSpeaker != (*iter).second->getSessionInfo()->getDisplayName() ) {
 				consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
 				layoutChanged = true;
@@ -553,7 +553,7 @@ OTObjectWrapper<OTPatternVideoHangout*> OTPatternVideoHangout::New(OTObjectWrapp
 // 				return true;
 // 			}
 // 		}
-// 		OT_WARN( "Setting speaker to", spkr );
+// 		OT_DEBUG_WARN( "Setting speaker to", spkr );
 // 	}
 
 // 	return false;
