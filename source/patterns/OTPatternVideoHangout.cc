@@ -449,10 +449,9 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 				if( consumersSpeaker == (*iter).second->getSessionInfo()->getDisplayName() ) {
 					(*iter).second->getSessionInfo()->setSpeaker( true );
 				}
-				OT_DEBUG_WARN( consumersSpeaker );
 			}
 
-			std::reverse( consumersVector.begin(), consumersVector.end() );
+			// std::reverse( consumersVector.begin(), consumersVector.end() );
 
 			consumersCount = nConsumers;
 			layoutChanged = true;
@@ -471,7 +470,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			
 			if( consumersSpeaker != (*iter).second->getSessionInfo()->getDisplayName() ) {
 				OT_DEBUG_WARN( "Speaker has changed in mix " );
-				consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
+				// consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
 				layoutChanged = true;
 			}
 				
