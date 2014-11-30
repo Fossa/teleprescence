@@ -443,7 +443,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			// layout changed
 			consumersVector.empty();
 
-			for(iter = pConsumers->begin() ; iter != pConsumers->end() ; ++iter ) {
+			for(iter = pConsumers->end() ; iter != pConsumers->begin() ; iter-- ) {
 				consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
 			}
 
