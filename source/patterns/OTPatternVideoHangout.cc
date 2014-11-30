@@ -456,14 +456,20 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			consumersCount = nConsumers;
 			layoutChanged = true;
 			iter = pConsumers->begin();
+
+			// Test
+			if( consumersCount > 2 ) {
+				this->setSpeaker( "2" );
+			}
 		}
 
 		if(!bSpeakerFound && ((bIsSpeaker = (*iter).second->getSessionInfo()->isSpeaker()) || ((i + 1) == nConsumers)))
 		{
 			//***
 			// Check if the speaker has changed, then we need to inform that the layout needs to change
-			OT_DEBUG_WARN( "Speaker has changed in mix " );
+			
 			if( consumersSpeaker != (*iter).second->getSessionInfo()->getDisplayName() ) {
+				OT_DEBUG_WARN( "Speaker has changed in mix " );
 				consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
 				layoutChanged = true;
 			}
