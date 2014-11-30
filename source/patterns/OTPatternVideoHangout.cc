@@ -429,6 +429,8 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			continue;
 		}
 		
+
+
 		//***
 		// First time check only, the first user to join the conversation is set as speaker
 		if( consumersCount == 0 ) {
@@ -445,6 +447,10 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			consumersVector.empty();
 
 			for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
+				(*iter).second->getSessionInfo()->setSpeaker( false );
+			}
+
+			for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
 				consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
 				if( consumersSpeaker == (*iter).second->getSessionInfo()->getDisplayName() ) {
 					(*iter).second->getSessionInfo()->setSpeaker( true );
@@ -458,12 +464,13 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			iter = pConsumers->begin();
 
 			// Test
-			if( consumersCount > 2 ) {
+			if( consumersCount > 1 ) {
+				OT_DEBUG_WARN( "I'm bigger than 1");
 				this->setSpeaker( "2" );
 			}
 		}
 
-		if(!bSpeakerFound && ((bIsSpeaker = (*iter).second->getSessionInfo()->isSpeaker()) || ((i + 1) == nConsumers)))
+		if(!bSpeakerFound && ((bIsSpeaker = (*iter).second->getSessionInfo()->isSpeaker()) ))
 		{
 			//***
 			// Check if the speaker has changed, then we need to inform that the layout needs to change
