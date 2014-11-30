@@ -449,6 +449,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 				if( consumersSpeaker == (*iter).second->getSessionInfo()->getDisplayName() ) {
 					(*iter).second->getSessionInfo()->setSpeaker( true );
 				}
+				OT_DEBUG_WARN( consumersSpeaker );
 			}
 
 			std::reverse( consumersVector.begin(), consumersVector.end() );
