@@ -437,6 +437,8 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			consumersCount = pConsumers->size();
 			consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
 			consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
+			(*iter).second->getSessionInfo()->setSpeaker(true);
+
 			layoutChanged = true;
 		}
 
