@@ -9,6 +9,10 @@
 #include "opentelepresence/OTWrap.h"
 #include "opentelepresence/OTEngine.h"
 
+//***
+#include <string>
+#include <vector>
+
 #include "tsk_memory.h"
 #include "tsk_debug.h"
 
@@ -536,7 +540,7 @@ OTObjectWrapper<OTPatternVideoHangout*> OTPatternVideoHangout::New(OTObjectWrapp
 }
 
 //***
-bool OTPatternVideoHangout::setSpeaker( string spkr ) {
+bool OTPatternVideoHangout::setSpeaker( std::string spkr ) {
 
 	OTObjectWrapper<OTSessionInfoAV*> oSessionInfo;
 	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> >::iterator iter;
