@@ -12,6 +12,7 @@
 //***
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #include "tsk_memory.h"
 #include "tsk_debug.h"
@@ -443,10 +444,11 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			// layout changed
 			consumersVector.empty();
 
-			for(iter = pConsumers->end()-- ; iter != pConsumers->begin() ; ) {
+			for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
 				consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
-				--iter;
 			}
+
+			std::reverse( consumersVector.begin(), consumersVector.end() );
 
 			consumersCount = nConsumers;
 			layoutChanged = true;
@@ -541,22 +543,22 @@ OTObjectWrapper<OTPatternVideoHangout*> OTPatternVideoHangout::New(OTObjectWrapp
 	return new OTPatternVideoHangout(oBridgeInfo);
 }
 
-// //***
-// bool OTPatternVideoHangout::setSpeaker( std::string spkr ) {
+//***
+bool OTPatternVideoHangout::setSpeaker( std::string spkr ) {
 
-// 	OTObjectWrapper<OTSessionInfoAV*> oSessionInfo;
-// 	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> >::iterator iter;
-// 	if( !_consumers ) {
-// 		// Loop through the consumers and try to find the name, if they match set him to speaker
-// 		for( iter = _consumers->begin() ; iter != _consumers->end() ; iter++ ) {
-// 			oSessionInfo = dynamic_cast<OTSessionInfoAV*>(*(*iter).second->getSessionInfo());
-// 			if( oSessionInfo->getSessionInfo()->getDisplayName() == spkr ) {
-// 				oSessionInfo->getSessionInfo()->setSpeaker( true );
-// 				return true;
-// 			}
-// 		}
-// 		OT_DEBUG_WARN( "Setting speaker to", spkr );
-// 	}
+	OTObjectWrapper<OTSessionInfoAV*> oSessionInfo;
+	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> >::iterator iter;
+	if( !_consumers ) {
+		// Loop through the consumers and try to find the name, if they match set him to speaker
+		for( iter = _consumers->begin() ; iter != _consumers->end() ; iter++ ) {
+			oSessionInfo = dynamic_cast<OTSessionInfoAV*>(*(*iter).second->getSessionInfo());
+			if( oSessionInfo->getSessionInfo()->getDisplayName() == spkr ) {
+				oSessionInfo->getSessionInfo()->setSpeaker( true );
+				return true;
+			}
+		}
+		OT_DEBUG_WARN( "Setting speaker to", spkr );
+	}
 
-// 	return false;
-// }
+	return false;
+}
