@@ -148,6 +148,10 @@ static inline void _findListenerDest(
 	const OTRatio_t &PAR
 	)
 {
+	//***
+	// Adjust consumers
+	nConsumers = (nConsumers < 2 ) ? nConsumers = 1 : nConsumers -= 1;
+
 	const size_t nActiveParticipants = TSK_MAX(nConsumers, kMinActiveParticipants4SizeCompute);
 	const size_t nListenerWidth = (nMixFrameWidth / nActiveParticipants);
 	const size_t nListenersWidth = (nConsumers * nListenerWidth);
@@ -491,16 +495,19 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		// lock() frame
 		oFrameVideo->lock();
 		// mix() listener (speaker is also mixed as listener)
-		_mixListener(
-			(*iter).second, 
-			m_pFrameMix, 
-			nConsumers, nListenerIndex, 
-			bIsSpeaker, (*iter).second->getSessionInfo()->isSpeaking(),
-			m_parListener
-			);
-		// mix() Speaker
-		if(bIsSpeaker)
+		if(!bIsSpeaker)
 		{
+			_mixListener(
+				(*iter).second, 
+				m_pFrameMix, 
+				nConsumers, nListenerIndex, 
+				bIsSpeaker, (*iter).second->getSessionInfo()->isSpeaking(),
+				m_parListener
+				);
+			// mix() Speaker
+			++nListenerIndex;
+		} else {
+
 			_mixSpeaker(
 					(*iter).second, 
 					m_pFrameMix, 
@@ -509,10 +516,11 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 					(oStreamer && oStreamer->isOpened()) ? *oStreamer : NULL
 					);
 		}
+		
 		// unlock() frame
 		oFrameVideo->unlock();
 
-		++nListenerIndex;		
+	
 	}//for
 
 	if(bMixed)
