@@ -55,13 +55,15 @@ if(BUILD_264 OR BUILD_ALL)
 endif(BUILD_264 OR BUILD_ALL)
 
 if(BUILD_YUV OR BUILD_ALL)
-	set(YUV_PREFIX yuv)
-	set(YUV_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/${YUV_PREFIX}/src/yuv/)
+	set(YUV_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/yuv-prefix/src/yuv/)
 	ExternalProject_Add(
 		yuv
 		SVN_REPOSITORY http://libyuv.googlecode.com/svn/trunk
 		CMAKE_ARGS
 			-DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+      -DCFLAGS=-Wl,--whole-archive
+      -DCXXFLAGS=-Wl,--whole-archive
+    #BUILD_COMMAND ${CMAKE_COMMAND} -E chdir ${YUV_SRC_DIR} make -j6 V=1 -r libyuv BUILDTYPE=Release
 	)
 	ExternalProject_Add_Step(
 		yuv cp_head
@@ -168,6 +170,8 @@ if(BUILD_G729 OR BUILD_ALL)
 		g729 install_include
 		COMMAND ${CMAKE_COMMAND} -E copy ${G729_SRC_DIR}/typedef.h ${CMAKE_INSTALL_PREFIX}/include/g729b/
 		COMMAND ${CMAKE_COMMAND} -E copy ${G729_SRC_DIR}/ld8a.h ${CMAKE_INSTALL_PREFIX}/include/g729b/
+    COMMAND ${CMAKE_COMMAND} -E copy ${G729_SRC_DIR}/dtx.h ${CMAKE_INSTALL_PREFIX}/include/g729b/
+    COMMAND ${CMAKE_COMMAND} -E copy ${G729_SRC_DIR}/octet.h ${CMAKE_INSTALL_PREFIX}/include/g729b/
 		DEPENDEES install
 	)
 endif(BUILD_G729 OR BUILD_ALL)
@@ -198,6 +202,7 @@ if(BUILD_iLBC OR BUILD_ALL)
     iLBC install_include
     COMMAND ${CMAKE_COMMAND} -E copy ${iLBC_SRC_DIR}/iLBC_define.h ${CMAKE_INSTALL_PREFIX}/include/ilbc/
     COMMAND ${CMAKE_COMMAND} -E copy ${iLBC_SRC_DIR}/iLBC_encode.h ${CMAKE_INSTALL_PREFIX}/include/ilbc/
+    COMMAND ${CMAKE_COMMAND} -E copy ${iLBC_SRC_DIR}/iLBC_decode.h ${CMAKE_INSTALL_PREFIX}/include/ilbc/
     DEPENDEES install
   )
 endif(BUILD_iLBC OR BUILD_ALL)
@@ -309,6 +314,8 @@ if(BUILD_DOUBANGO OR BUILD_ALL)
   ExternalProject_Add_Step(
     doubango cp_src
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${DOUBANGO_SRC_DIR} ${CMAKE_CURRENT_BINARY_DIR}/doubango/src/doubango-build/
+    DEPENDEES configure
+    DEPENDERS build
   )
 endif(BUILD_DOUBANGO OR BUILD_ALL)
 
