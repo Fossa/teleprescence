@@ -66,7 +66,7 @@ OTPatternVideoHangout::OTPatternVideoHangout(OTObjectWrapper<OTBridgeInfo*> oBri
 
 	//***
 	consumersCount = 0;
-	consumersSpeaker = "";
+	consumersSpeaker = "1";
 	_consumers = NULL;
 }
 
@@ -446,6 +446,9 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 
 			for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
 				consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
+				if( consumersSpeaker == (*iter).second->getSessionInfo()->getDisplayName() ) {
+					(*iter).second->getSessionInfo()->setSpeaker( true );
+				}
 			}
 
 			std::reverse( consumersVector.begin(), consumersVector.end() );
@@ -531,6 +534,29 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 	
 	}//for
 
+	//***
+	// If the speaker has changed or a user has left or joined
+	if( layoutChanged ) {
+		OT_DEBUG_WARN( "Layout changed" );
+		// Find the speaker
+		for( std::vector< std::string >::iterator it = consumersVector.begin() ; it != consumersVector.end() ; it++ ) {
+			if( *it == consumersSpeaker ) {
+				// Pop the speaker and insert him in the front of the vector
+				int index = std::distance( consumersVector.begin(), it );
+				consumersVector.erase( consumersVector.begin() + index );
+				consumersVector.insert( consumersVector.begin(), consumersSpeaker );
+				break;
+			}
+		}
+		// Debug loop to see what the vector contains
+		// OT_DEBUG_WARN( "Consumers vector: ");
+		// for( std::vector< std::string >::iterator it = consumersVector.begin() ; it != consumersVector.end() ; it++ ) {
+		// 	OT_DEBUG_WARN( *it );
+		// }
+
+		//stefan.layoutChanged( consumersVector );
+	}
+
 	if(bMixed)
 	{
 		return m_oLastMixedFrameResult;
@@ -544,7 +570,7 @@ OTObjectWrapper<OTPatternVideoHangout*> OTPatternVideoHangout::New(OTObjectWrapp
 }
 
 //***
-bool OTPatternVideoHangout::setSpeaker( std::string spkr ) {
+bool OTPatternVideoHangout::setSpeaker( std::string spkr ) : consumersSpeaker( spkr ) {
 
 	OTObjectWrapper<OTSessionInfoAV*> oSessionInfo;
 	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> >::iterator iter;
