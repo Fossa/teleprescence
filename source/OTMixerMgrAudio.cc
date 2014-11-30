@@ -384,11 +384,15 @@ next_iter_cons_1:
 
 	if(oSpeakerSessionInfo)
 	{
-		oSpeakerSessionInfo->setSpeaker(true);
+		//***
+		// Removed auto set speaker
+		// oSpeakerSessionInfo->setSpeaker(true);
 	}
 	if(oSpeakingSessionInfo)
 	{
-		oSpeakingSessionInfo->setSpeaking(true);
+		//***
+		// Removed auto set speaker
+		// oSpeakingSessionInfo->setSpeaking(true);
 	}
 
 	//
