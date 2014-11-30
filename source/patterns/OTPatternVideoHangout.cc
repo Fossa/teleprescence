@@ -445,6 +445,9 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			OT_DEBUG_WARN( "One user has joined or left" );
 			// layout changed
 			consumersVector.empty();
+			
+			if( _consumers != NULL )
+				pConsumers = _consumers;
 
 			for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
 				(*iter).second->getSessionInfo()->setSpeaker( false );
