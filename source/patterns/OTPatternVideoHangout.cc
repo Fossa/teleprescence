@@ -475,7 +475,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			}
 		}
 
-		if(!bSpeakerFound && ((bIsSpeaker = (*iter).second->getSessionInfo()->isSpeaker()) ))
+		if(!bSpeakerFound && ((bIsSpeaker = (*iter).second->getSessionInfo()->isSpeaker()) ((i + 1) == nConsumers)))
 		{
 			//***
 			// Check if the speaker has changed, then we need to inform that the layout needs to change
