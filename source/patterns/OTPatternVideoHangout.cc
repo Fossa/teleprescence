@@ -499,8 +499,18 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		// lock() frame
 		oFrameVideo->lock();
 		// mix() listener (speaker is also mixed as listener)
-		if(!bIsSpeaker)
-		{
+
+		//***
+		if(bIsSpeaker) {
+			_mixSpeaker(
+					(*iter).second, 
+					m_pFrameMix, 
+					nConsumers,
+					m_parSpeaker,
+					(oStreamer && oStreamer->isOpened()) ? *oStreamer : NULL
+			);
+
+		} else {
 			_mixListener(
 				(*iter).second, 
 				m_pFrameMix, 
@@ -509,16 +519,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 				m_parListener
 				);
 			// mix() Speaker
-			++nListenerIndex;
-		} else {
-
-			_mixSpeaker(
-					(*iter).second, 
-					m_pFrameMix, 
-					nConsumers,
-					m_parSpeaker,
-					(oStreamer && oStreamer->isOpened()) ? *oStreamer : NULL
-					);
+			nListenerIndex++;
 		}
 		
 		// unlock() frame

@@ -362,8 +362,8 @@ int OTMixerMgrAudio::mixAndSend()
 		(*iter_cons).second->pullAndHold();
 
 		// Check volume and set speaker
-		(*iter_cons).second->setSessionInfoSpeaker(false); // reset()
-		(*iter_cons).second->setSessionInfoSpeaking(false); // reset()
+		// (*iter_cons).second->setSessionInfoSpeaker(false); // reset()
+		// (*iter_cons).second->setSessionInfoSpeaking(false); // reset()
 		if(!dynamic_cast<OTSessionInfoAV*>(*(*iter_cons).second->getSessionInfo())->isMuteRemote())
 		{
 			if((dMaxVolume = (*iter_cons).second->getVolumeNow()) >= dMaxVolumeNow)
