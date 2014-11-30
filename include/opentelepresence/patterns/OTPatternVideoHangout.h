@@ -23,10 +23,22 @@ public:
 
 	static OTObjectWrapper<OTPatternVideoHangout*> New(OTObjectWrapper<OTBridgeInfo*> oBridgeInfo);
 
+	//***
+	bool setSpeaker( string spkr );
+
 private:
 	struct AVFrame *m_pFrameMix;
 	OTRatio_t m_parSpeaker;
 	OTRatio_t m_parListener;
+
+	//***
+	std::vector< string > consumersVector;
+	string consumersSpeaker;
+	size_t consumersCount;
+	//Casablanca stefan;
+
+	// Used for set speaker
+	OTObjectWrapper<OTProxyPluginConsumerVideo*> > _consumers;
 };
 
 #endif /* OPENTELEPRESENCE_PATTERNVIDEO_HANGOUT_H */
