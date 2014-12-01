@@ -80,6 +80,8 @@ OTPatternVideoHangout::~OTPatternVideoHangout()
 		av_free(m_pFrameMix);
 	}
 
+	delete stefan;
+
 	OT_DEBUG_INFO("*** OTPatternVideoHangout destroyed ***");
 }
 
@@ -569,7 +571,9 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		// 	OT_DEBUG_WARN( *it );
 		// }
 
-		//stefan->layout_change( (*iter).second->getSessionInfo()->getBridgeId(), consumersVector );
+		OT_DEBUG_WARN( "Layout changed, sending to Casablanca..." );
+
+		stefan->layout_change( (*iter).second->getSessionInfo()->getBridgeId(), consumersVector );
 	}
 
 	if(bMixed)
