@@ -16,9 +16,9 @@
 class Client
 {
 public:
-	virtual void auth_user(std::string cookie, int room, std::function<void(int, std::string)> cb) = 0;
+	virtual void auth_user(std::string cookie, std::string room, std::function<void(int, std::string)> cb) = 0;
 	// virtual void layout_change(int room_id, int layout[], size_t sz)=0;
-	virtual void layout_change(int room_id, std::vector<int> layout)=0;
+	virtual void layout_change(std::string room_id, std::vector<int> layout)=0;
 	virtual ~Client(){};
 };
 

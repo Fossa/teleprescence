@@ -15,7 +15,7 @@ using namespace web::http::client;
 
 std::string int_array_to_string(int int_array[], int size_of_array);
 
-void node_consumer_impl::auth_user(std::string cookie, int room, std::function<void(int, std::string)> cb){
+void node_consumer_impl::auth_user(std::string cookie, std::string room, std::function<void(int, std::string)> cb){
 // 	std::string url = "http://localhost:3005/";
 // 	auto status_code = std::make_shared<web::http::status_code*const>();
 
@@ -59,7 +59,7 @@ void display_field_map_json(web::json::value  jvalue)
    }
 }
 
-void node_consumer_impl::layout_change(std::string room_id, std::vector< std::string > layout){
+void node_consumer_impl::layout_change(std::string room_id, std::vector< int > layout){
 	// // std::string url = "http://localhost:3005/";
 	// auto arr = json::value::array();
 	// for(int i = 0; i<sz; ++i){
@@ -79,7 +79,7 @@ void node_consumer_impl::layout_change(std::string room_id, std::vector< std::st
 	jvalue["layout"] = web::json::value::array(arr);
 
 	http_client client(U(this->url));
-	client.request(methods::POST,(const ::utility::string_t) "/api/tp/"+std::to_string(room_id)+"/layoutchange", (json::value const &)jvalue)
+	client.request(methods::POST,(const ::utility::string_t) "/api/tp/"+room_id+"/layoutchange", (json::value const &)jvalue)
       .then([](http_response response)
       {
          if (response.status_code() == status_codes::OK)
