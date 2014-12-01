@@ -9,6 +9,11 @@
 #include "opentelepresence/OTWrap.h"
 #include "opentelepresence/OTEngine.h"
 
+//***
+#include <string>
+#include <vector>
+#include <algorithm>
+
 #include "tsk_memory.h"
 #include "tsk_debug.h"
 
@@ -60,8 +65,8 @@ OTPatternVideoHangout::OTPatternVideoHangout(OTObjectWrapper<OTBridgeInfo*> oBri
 	m_oBridgeInfo->getVideoListenerPAR(m_parListener.nNumerator, m_parListener.nDenominator);
 
 	//***
-	consumerCount = 0;
-	consumersSpeaker = NULL;
+	consumersCount = 0;
+	consumersSpeaker = "1";
 	_consumers = NULL;
 }
 
@@ -424,39 +429,62 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			continue;
 		}
 		
+
+
 		//***
 		// First time check only, the first user to join the conversation is set as speaker
-		if( consumerCount == 0 ) {
-			consumerCount = pConsumers->size();
+		if( consumersCount == 0 ) {
+			consumersCount = pConsumers->size();
 			consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
 			consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
+			(*iter).second->getSessionInfo()->setSpeaker(true);
+
 			layoutChanged = true;
 		}
 
 		// If one user has entered or left the conversation the layout has changed
-		if( consumerCount != nConsumers ) {
+		if( consumersCount != nConsumers ) {
 			OT_DEBUG_WARN( "One user has joined or left" );
 			// layout changed
 			consumersVector.empty();
 
-			for(iter = pConsumers->begin() ; iter != pConsumers->end() ; ++iter ) {
-				consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
+			if( _consumers != NULL )
+				pConsumers = _consumers;
+
+			for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
+				(*iter).second->getSessionInfo()->setSpeaker( false );
 			}
 
-			consumerCount = nConsumers;
+			for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
+				consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
+				if( consumersSpeaker == (*iter).second->getSessionInfo()->getDisplayName() ) {
+					(*iter).second->getSessionInfo()->setSpeaker( true );
+				}
+			}
+
+			// std::reverse( consumersVector.begin(), consumersVector.end() );
+
+			consumersCount = nConsumers;
 			layoutChanged = true;
 			iter = pConsumers->begin();
+
+			// Test
+			if( consumersCount > 1 ) {
+				OT_DEBUG_WARN( "I'm bigger than 1");
+				this->setSpeaker( "2" );
+			}
 		}
 
-		if(!bSpeakerFound && ((bIsSpeaker = (*iter).second->getSessionInfo()->isSpeaker()) || ((i + 1) == nConsumers)))
+		if(!bSpeakerFound && ((bIsSpeaker = (*iter).second->getSessionInfo()->isSpeaker()) ((i + 1) == nConsumers)))
 		{
 			//***
 			// Check if the speaker has changed, then we need to inform that the layout needs to change
-			OT_DEBUG_WARN( "Speaker has changed in mix " );
-			if( consumersSpeaker != (*iter).second->getSessionInfo()->getDisplayName() ) {
-				consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
-				layoutChanged = true;
-			}
+			
+			// if( consumersSpeaker != (*iter).second->getSessionInfo()->getDisplayName() ) {
+			// 	OT_DEBUG_WARN( "Speaker has changed in mix " );
+			// 	// consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
+			// 	layoutChanged = true;
+			// }
 				
 			bIsSpeaker = true;
 			bSpeakerFound = true;
@@ -495,8 +523,18 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		// lock() frame
 		oFrameVideo->lock();
 		// mix() listener (speaker is also mixed as listener)
-		if(!bIsSpeaker)
-		{
+
+		//***
+		if(bIsSpeaker) {
+			_mixSpeaker(
+					(*iter).second, 
+					m_pFrameMix, 
+					nConsumers,
+					m_parSpeaker,
+					(oStreamer && oStreamer->isOpened()) ? *oStreamer : NULL
+			);
+
+		} else {
 			_mixListener(
 				(*iter).second, 
 				m_pFrameMix, 
@@ -505,16 +543,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 				m_parListener
 				);
 			// mix() Speaker
-			++nListenerIndex;
-		} else {
-
-			_mixSpeaker(
-					(*iter).second, 
-					m_pFrameMix, 
-					nConsumers,
-					m_parSpeaker,
-					(oStreamer && oStreamer->isOpened()) ? *oStreamer : NULL
-					);
+			nListenerIndex++;
 		}
 		
 		// unlock() frame
@@ -522,6 +551,29 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 
 	
 	}//for
+
+	//***
+	// If the speaker has changed or a user has left or joined
+	if( layoutChanged ) {
+		// OT_DEBUG_WARN( "Layout changed" );
+		// Find the speaker
+		for( std::vector< std::string >::iterator it = consumersVector.begin() ; it != consumersVector.end() ; it++ ) {
+			if( *it == consumersSpeaker ) {
+				// Pop the speaker and insert him in the front of the vector
+				int index = std::distance( consumersVector.begin(), it );
+				consumersVector.erase( consumersVector.begin() + index );
+				consumersVector.insert( consumersVector.begin(), consumersSpeaker );
+				break;
+			}
+		}
+		// Debug loop to see what the vector contains
+		// OT_DEBUG_WARN( "Consumers vector: ");
+		// for( std::vector< std::string >::iterator it = consumersVector.begin() ; it != consumersVector.end() ; it++ ) {
+		// 	OT_DEBUG_WARN( *it );
+		// }
+
+		//stefan.layoutChanged( consumersVector );
+	}
 
 	if(bMixed)
 	{
@@ -536,21 +588,23 @@ OTObjectWrapper<OTPatternVideoHangout*> OTPatternVideoHangout::New(OTObjectWrapp
 }
 
 //***
-bool OTPatternVideoHangout::setSpeaker( string spkr ) {
-
+bool OTPatternVideoHangout::setSpeaker( std::string spkr ) {
+	consumersSpeaker = spkr;
 	OTObjectWrapper<OTSessionInfoAV*> oSessionInfo;
 	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> >::iterator iter;
 	if( !_consumers ) {
 		// Loop through the consumers and try to find the name, if they match set him to speaker
 		for( iter = _consumers->begin() ; iter != _consumers->end() ; iter++ ) {
 			oSessionInfo = dynamic_cast<OTSessionInfoAV*>(*(*iter).second->getSessionInfo());
-			if( oSessionInfo->getSessionInfo()->getDisplayName() == spkr ) {
-				oSessionInfo->getSessionInfo()->setSpeaker( true );
+			if( (*iter).second->getSessionInfo()->getDisplayName() == spkr ) {
+				OT_DEBUG_WARN( "Speaker found!");
+				(*iter).second->getSessionInfo()->setSpeaker( true );
 				return true;
 			}
 		}
-		OT_DEBUG_WARN( "Setting speaker to", spkr );
 	}
+
+	OT_DEBUG_WARN( "setSpeaker has changed to" );
 
 	return false;
 }

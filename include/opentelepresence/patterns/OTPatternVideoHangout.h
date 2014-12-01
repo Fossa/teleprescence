@@ -10,6 +10,10 @@
 #include "opentelepresence/patterns/OTPatternVideo.h"
 #include "opentelepresence/OTBridge.h"
 
+//***
+#include <string>
+#include <vector>
+
 class OTPatternVideoHangout : public OTPatternVideo
 {
 protected:
@@ -24,7 +28,7 @@ public:
 	static OTObjectWrapper<OTPatternVideoHangout*> New(OTObjectWrapper<OTBridgeInfo*> oBridgeInfo);
 
 	//***
-	bool setSpeaker( string spkr );
+	bool setSpeaker( std::string spkr );
 
 private:
 	struct AVFrame *m_pFrameMix;
@@ -32,13 +36,13 @@ private:
 	OTRatio_t m_parListener;
 
 	//***
-	std::vector< string > consumersVector;
-	string consumersSpeaker;
+	std::vector< std::string > consumersVector;
+	std::string consumersSpeaker;
 	size_t consumersCount;
 	//Casablanca stefan;
 
 	// Used for set speaker
-	OTObjectWrapper<OTProxyPluginConsumerVideo*> > _consumers;
+	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> > *_consumers;
 };
 
 #endif /* OPENTELEPRESENCE_PATTERNVIDEO_HANGOUT_H */
