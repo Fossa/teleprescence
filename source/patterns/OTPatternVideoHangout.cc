@@ -70,6 +70,7 @@ OTPatternVideoHangout::OTPatternVideoHangout(OTObjectWrapper<OTBridgeInfo*> oBri
 	consumersCount = 0;
 	consumersSpeaker = "";
 	_consumers = NULL;
+	stefan = new node_consumer_impl("http://localhost:3005");
 }
 
 OTPatternVideoHangout::~OTPatternVideoHangout()
