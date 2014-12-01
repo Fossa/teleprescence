@@ -452,7 +452,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		if( consumersCount != nConsumers ) {
 			OT_DEBUG_WARN( "One user has joined or left" );
 			// layout changed
-			consumersVector.empty();
+			consumersVector.clear();
 
 			if( _consumers != NULL )
 				pConsumers = _consumers;
