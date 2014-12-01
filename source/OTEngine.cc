@@ -1151,7 +1151,7 @@ bool OTEngine::setConfFile(const char* pcConfFileFullPath)
 				pcParamName = (*iterParam)->getName();
 				pcParamValue = (*iterParam)->getValue();
 				OT_DEBUG_INFO_EX(kOTMobuleNameCfg, "%s = %s", pcParamName, pcParamValue);
-				else if(tsk_striequals("host", pcParamName))
+				if(tsk_striequals("host", pcParamName))
 				{
 					//setPresentationSharingLocalPort(atoi(pcParamValue));
 				}
