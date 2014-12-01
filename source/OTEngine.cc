@@ -1138,6 +1138,33 @@ bool OTEngine::setConfFile(const char* pcConfFileFullPath)
 
 			/* END[BRIDGE] */
 		}
+		/////////////////
+		// NODE
+		/////////////////
+		else if (tsk_striequals("NODE", (*iterSection)->getName())){
+			const std::list<OTObjectWrapper<OTCfgParam *> >*pParams = (*iterSection)->getParams();
+			/* BEGIN[GLOBAL] */
+			for(iterParam = pParams->begin(); iterParam != pParams->end(); ++iterParam)
+			{
+				TSK_OBJECT_SAFE_FREE(pParamValues);
+
+				pcParamName = (*iterParam)->getName();
+				pcParamValue = (*iterParam)->getValue();
+				OT_DEBUG_INFO_EX(kOTMobuleNameCfg, "%s = %s", pcParamName, pcParamValue);
+				else if(tsk_striequals("host", pcParamName))
+				{
+					//setPresentationSharingLocalPort(atoi(pcParamValue));
+				}
+				else if(tsk_striequals("server_port", pcParamName))
+				{
+					// setPresentationSharingLocalPort(atoi(pcParamValue));
+				}
+				else if(tsk_striequals("interface", pcParamName))
+				{
+					// setPresentationSharingLocalPort(atoi(pcParamValue));
+				}
+			}
+		} /* END[NODE] */
 	}
 
 bail:

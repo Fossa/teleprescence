@@ -5,10 +5,10 @@
 * Created: 2014-11-28.
 */
 #include "server.h"
-#include <cpprest/http_client.h>
-#include <cpprest/json.h>
-#include <cpprest/filestream.h>
-#include <cpprest\http_listener.h>
+// #include <cpprest/http_client.h>
+// #include <cpprest/json.h>
+// #include <cpprest/filestream.h>
+// #include <cpprest/http_listener.h>
 
 
 using namespace web;
