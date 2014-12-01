@@ -79,7 +79,7 @@ void node_consumer_impl::layout_change(int room_id, std::vector<int> layout){
 	jvalue["layout"] = web::json::value::array(arr);
 
 	http_client client(U(this->url));
-	client.request(methods::POST,(const ::utility::string_t) "/api/tp/1/layoutchange", (json::value const &)jvalue)
+	client.request(methods::POST,(const ::utility::string_t) "/api/tp/"+std::to_string(room_id)+"/layoutchange", (json::value const &)jvalue)
       .then([](http_response response)
       {
          if (response.status_code() == status_codes::OK)
