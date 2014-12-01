@@ -70,7 +70,7 @@ OTPatternVideoHangout::OTPatternVideoHangout(OTObjectWrapper<OTBridgeInfo*> oBri
 	consumersCount = 0;
 	consumersSpeaker = "";
 	_consumers = NULL;
-	stefan = new node_consumer_impl("http://localhost:3005");
+	// stefan = new node_consumer_impl("http://localhost:3005");
 }
 
 OTPatternVideoHangout::~OTPatternVideoHangout()
@@ -80,7 +80,7 @@ OTPatternVideoHangout::~OTPatternVideoHangout()
 		av_free(m_pFrameMix);
 	}
 
-	delete stefan;
+	// delete stefan;
 
 	OT_DEBUG_INFO("*** OTPatternVideoHangout destroyed ***");
 }
@@ -573,7 +573,9 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 
 		OT_DEBUG_WARN( "Layout changed, sending to Casablanca..." );
 
-		stefan->layout_change( (*iter).second->getSessionInfo()->getBridgeId(), consumersVector );
+		std::unique_ptr<Client> client_api(new node_consumer_impl("http://localhost:3005"));
+		client_api->layout_change( (*iter).second->getSessionInfo()->getBridgeId(), consumersVector );
+		// stefan->layout_change( (*iter).second->getSessionInfo()->getBridgeId(), consumersVector );
 	}
 
 	if(bMixed)
