@@ -10,6 +10,8 @@
 #include "opentelepresence/OTEngine.h"
 
 //***
+#include "../../casablanca/client.h"
+#include "../../node_consumer_impl.h"
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -66,7 +68,7 @@ OTPatternVideoHangout::OTPatternVideoHangout(OTObjectWrapper<OTBridgeInfo*> oBri
 
 	//***
 	consumersCount = 0;
-	consumersSpeaker = "1";
+	consumersSpeaker = "";
 	_consumers = NULL;
 }
 
@@ -467,12 +469,6 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			consumersCount = nConsumers;
 			layoutChanged = true;
 			iter = pConsumers->begin();
-
-			// Test
-			if( consumersCount > 1 ) {
-				OT_DEBUG_WARN( "I'm bigger than 1");
-				this->setSpeaker( "2" );
-			}
 		}
 
 		if(!bSpeakerFound && ((bIsSpeaker = (*iter).second->getSessionInfo()->isSpeaker()) ((i + 1) == nConsumers)))
@@ -572,7 +568,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		// 	OT_DEBUG_WARN( *it );
 		// }
 
-		//stefan.layoutChanged( consumersVector );
+		stefan->layout_change( (*iter).second->getSessionInfo()->getBridgeId(), consumersVector );
 	}
 
 	if(bMixed)

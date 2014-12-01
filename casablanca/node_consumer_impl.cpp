@@ -59,7 +59,7 @@ void display_field_map_json(web::json::value  jvalue)
    }
 }
 
-void node_consumer_impl::layout_change(int room_id, std::vector<int> layout){
+void node_consumer_impl::layout_change(std::string room_id, std::vector< std::string > layout){
 	// // std::string url = "http://localhost:3005/";
 	// auto arr = json::value::array();
 	// for(int i = 0; i<sz; ++i){
