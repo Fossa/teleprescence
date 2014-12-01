@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <memory>
 
 #include "tsk_memory.h"
 #include "tsk_debug.h"
