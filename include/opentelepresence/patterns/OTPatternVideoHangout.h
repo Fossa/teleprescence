@@ -42,7 +42,7 @@ private:
 	std::string consumersSpeaker;
 	size_t consumersCount;
 	//Casablanca stefan;
-	node_consumer_impl *stefan;
+	//node_consumer_impl *stefan;
 
 	// Used for set speaker
 	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> > *_consumers;

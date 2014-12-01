@@ -568,7 +568,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		// 	OT_DEBUG_WARN( *it );
 		// }
 
-		stefan->layout_change( (*iter).second->getSessionInfo()->getBridgeId(), consumersVector );
+		//stefan->layout_change( (*iter).second->getSessionInfo()->getBridgeId(), consumersVector );
 	}
 
 	if(bMixed)
