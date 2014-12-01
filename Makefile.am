@@ -51,7 +51,8 @@ ${LIBAVFORMAT_LIBS} \
 ${LIBAVUTIL_LIBS} \
 ${LIBSWRESAMPLE_LIBS} \
 ${LIBSWSCAL_LIBS} \
-${OPENAL_LIBS}
+${OPENAL_LIBS} \
+-lcpprest
 
 telepresence_SOURCES  = \
 	source/main.cc \
@@ -150,6 +151,9 @@ telepresence_SOURCES  += \
 	tinywrap/SMSEncoder.cxx\
 	tinywrap/Xcap.cxx
 
+telepresence_SOURCES += \
+	casablanca/server.cpp\
+	casablanca/node_consumer_impl.cpp
 
 telepresence_LDFLAGS = -Wl,-rpath,$$ORIGIN
 
@@ -164,7 +168,7 @@ include $(SETTINGS)/dk.mk
 include $(SETTINGS)/stdtarget.mk
 
 
-telepresence_CPPFLAGS += ${CC_DEFINES} -I${PRJ}/includecpp -I${PRJ}/include
+telepresence_CPPFLAGS += ${CC_DEFINES} -I${PRJ}/includecpp -I${PRJ}/include --std=c++11
 telepresence_LDADD += ${CPPUHELPERLIB} ${CPPULIB} ${SALHELPERLIB} ${SALLIB}
 telepresence_LDFLAGS += -Wl,-rpath,${OPENOFFICE_ROOT}/sdk/lib:${OPENOFFICE_ROOT}/program
 endif
