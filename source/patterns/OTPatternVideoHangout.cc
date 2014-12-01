@@ -575,7 +575,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		OT_DEBUG_WARN( "Layout changed, sending to Casablanca..." );
 
 		std::unique_ptr<Client> client_api(new node_consumer_impl("http://localhost:3005"));
-		client_api->layout_change( (*iter).second->getSessionInfo()->getBridgeId(), consumersVector );
+		client_api->layout_change( m_oBridgeInfo->getId(), consumersVector );
 		// stefan->layout_change( (*iter).second->getSessionInfo()->getBridgeId(), consumersVector );
 	}
 
