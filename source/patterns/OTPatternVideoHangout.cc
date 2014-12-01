@@ -11,7 +11,7 @@
 
 //***
 #include "../../casablanca/client.h"
-#include "../../node_consumer_impl.h"
+#include "../../casablanca/node_consumer_impl.h"
 #include <string>
 #include <vector>
 #include <algorithm>

@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 #include "../../../casablanca/client.h"
-#include "../../../node_consumer_impl.h"
+#include "../../../casablanca/node_consumer_impl.h"
 
 class OTPatternVideoHangout : public OTPatternVideo
 {
