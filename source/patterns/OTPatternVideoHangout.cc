@@ -462,9 +462,15 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			}
 
 			for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
+				// Build layout vector
 				consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
+				// Search for our speaker and force him to be speaker
 				if( consumersSpeaker == (*iter).second->getSessionInfo()->getDisplayName() ) {
 					(*iter).second->getSessionInfo()->setSpeaker( true );
+				// If no speaker is found, set the last person to speaker
+				} else if ( (i + 1) == nConsumers ) {
+					(*iter).second->getSessionInfo()->setSpeaker( true );
+					this->setSpeaker( (*iter).second->getSessionInfo()->getDisplayName() );
 				}
 			}
 
