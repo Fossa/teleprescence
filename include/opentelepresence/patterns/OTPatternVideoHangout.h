@@ -30,7 +30,8 @@ public:
 	static OTObjectWrapper<OTPatternVideoHangout*> New(OTObjectWrapper<OTBridgeInfo*> oBridgeInfo);
 
 	//***
-	bool setSpeaker( std::string spkr );
+	bool setSpeaker( std::vector< std::string > spkr );
+	unsigned int getNumberOfConsumers();
 
 private:
 	struct AVFrame *m_pFrameMix;
