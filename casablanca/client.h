@@ -8,30 +8,19 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-#include <cpprest/http_client.h>
-#include <cpprest/json.h>
-#include <cpprest/http_client.h>
-#include <cpprest/filestream.h>
-
-using namespace web;
-using namespace web::http;
-using namespace web::http::client;
-
-
-using namespace std;
+#include <string>
+#include <functional>
+#include <vector>
 
 // Declaring functions for Graph class
 class Client
 {
 public:
-	Client();
-    ~Client();
-
-	//TODO: add constructor with parameters
-
-
-
-
+	virtual void auth_user(std::string cookie, std::string room, std::function<void(int, std::string)> cb) = 0;
+	// virtual void layout_change(int room_id, int layout[], size_t sz)=0;
+	virtual void layout_change(std::string room_id, std::vector< std::string > layout)=0;
+	virtual ~Client(){};
 };
 
+// Client::~Client(){}
 #endif

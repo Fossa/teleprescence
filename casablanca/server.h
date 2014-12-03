@@ -20,7 +20,7 @@ using namespace std;
 class Server
 {
 public:
-	Server();
+	Server(string uri);
 	~Server();
 
 	std::function<void(string,std::vector<string>)> cb;
@@ -33,6 +33,7 @@ public:
 	 
 private:
 	http_listener listener;
+	string_t str; 
 };
 
 #endif

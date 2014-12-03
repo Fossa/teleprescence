@@ -194,6 +194,11 @@ private:
 	OTObjectWrapper<OTEngineInfo*> m_oInfo;
 
 	bool m_bStarted;
+
+
+	Server s;
+	
+
 };
 
 #if defined(_MSC_VER)
