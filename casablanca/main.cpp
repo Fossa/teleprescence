@@ -41,12 +41,25 @@ void testAuthUser(std::string cookie, std::string room_id);
 void testLayoutChange(std::string roomId, int layout[], size_t sz);
 int main(int argc, char*argv[])
 {
-	
-	Server s; 
+	Server s("http://localhost:3010/api/tp");
+
+	Server t("http://localhost:3010/api/tp2");
 	s.set([](string r, vector<string> v){
-		cout << "success"<<endl;
+		cout <<r<< "::"<<  v.at(0)  <<endl;
 	});
+
+	 int i = t.set2([](string r, vector<string> v){
+		  
+	});
+	 	 	cout << "::"<<  i  <<endl;
+
 	s.startListener();
+	t.startListener();
+
+	fgetc(stdin);
+	s.stopListener();
+	t.stopListener();
+	
 	
 	
 	//Listener function

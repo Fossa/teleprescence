@@ -18,6 +18,7 @@
 #include "MediaSessionMgr.h"
 
 #include "tsk_debug.h"
+//***
 #include "../../casablanca/server.h"
 
 #include <assert.h>
@@ -181,21 +182,34 @@ bool OTEngine::start()
 		goto bail;
 	}
 
-
+//***
+	 
 	speakerListener("http://localhost:3010/api/tp/");
 	
 
 	if(speakerListener.startListener()){
-		speakerListener.set([](string r, vector<string> v){
+		speakerListener.set([](std::string r, vector<std::string> v){
+
+	OTObjectWrapper<OTBridge*> bridgeWrapper =  getBridge(g_uId, stol(getEngine(r));
+ 
+	OTObjectWrapper< OTBridgeInfo*> currentBridge = bridgeWrapper->getInfo();
+
+	currentBridge->setSpeakerSipSessionId.setSpeakerSipSessionId(stol(v.at(0)));
+	 
+
 			OT_DEBUG_ERROR("Start Speaker Listener"); 
 		});
+
+
 	}else{
 		OT_DEBUG_ERROR("Failed to start Speaker Listener stack");
 		ret = -2;
 		goto bail;
 	}
 
-	
+
+ 
+
 
 bail:
 	
@@ -253,7 +267,7 @@ bool OTEngine::stop()
 		goto bail;
 	}
 
-
+//***
 	if(speakerListener.stopListener()){
 	OT_DEBUG_ERROR("Stop Speaker Listener");
 
@@ -262,6 +276,19 @@ bool OTEngine::stop()
 		ret = -2;
 		goto bail;
 	}
+
+if(participantsListener.stopListener()){
+	OT_DEBUG_ERROR("Stop Participants Listener");
+
+	}else{
+		OT_DEBUG_ERROR("Failed to stop Participants Listener stack");
+		ret = -2;
+		goto bail;
+	}
+
+
+
+
 	
 bail:
 	// unbind the callback from this engine
