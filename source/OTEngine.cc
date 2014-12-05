@@ -61,6 +61,7 @@ OTEngine::OTEngine()
 : OTObject()
 , m_bStarted(false)
 , m_uId(++g_uId)
+, speakerListener("http://localhost:3010/api/tp/layoutchange")
 {
 	if(!OTEngine::g_bInitialized)
 	{
@@ -184,7 +185,6 @@ bool OTEngine::start()
 
 //***
 	 
-	speakerListener("http://localhost:3010/api/tp/");
 	
 
 	if(speakerListener.startListener()){
@@ -277,14 +277,14 @@ bool OTEngine::stop()
 		goto bail;
 	}
 
-if(participantsListener.stopListener()){
-	OT_DEBUG_ERROR("Stop Participants Listener");
+// if(participantsListener.stopListener()){
+// 	OT_DEBUG_ERROR("Stop Participants Listener");
 
-	}else{
-		OT_DEBUG_ERROR("Failed to stop Participants Listener stack");
-		ret = -2;
-		goto bail;
-	}
+// 	}else{
+// 		OT_DEBUG_ERROR("Failed to stop Participants Listener stack");
+// 		ret = -2;
+// 		goto bail;
+// 	}
 
 
 
