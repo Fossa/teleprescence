@@ -366,13 +366,13 @@ int OTSipCallback::OnInviteEvent(const InviteEvent* e)
 
 					std::string username = client.auth_user(cookie, brideid);
 
-					if(tsk_strnullORempty(username)){
+					if(!username || username.empty()){
 						rejectCall(pCallSession, 484, tsk_strnullORempty(pcWrappedMessage->To->uri->user_name) ? "Incomplete destination address" : "Incomplete source address");
 						delete pCallSession, pCallSession = NULL;
 						return 0;
 					}
 
-					pcWrappedMessage->From->uri->display_name = username.c_str();
+					pcWrappedMessage->From->uri->display_name = username;
 
 					// create bridge identifier from the destination name
 					std::string strBridgeId(pcWrappedMessage->To->uri->user_name);
