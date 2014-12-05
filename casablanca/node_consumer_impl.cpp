@@ -16,6 +16,49 @@ using namespace web::http::client;
 std::string int_array_to_string(int int_array[], int size_of_array);
 
 void node_consumer_impl::auth_user(std::string cookie, std::string room, std::function<void(int, std::string)> cb){
+   std::vector<web::json::value> arr = std::vector<web::json::value>();
+   for(auto id : layout){
+      arr.push_back(json::value(id));
+   }
+   web::json::value jvalue;
+   jvalue["cookie"] = web::json::value::string(cookie);
+   jvalue["room"] = web::json::value::string(room);
+
+   http_client client(U(this->url));
+   client.request(methods::POST,(const ::utility::string_t) "/api/tp/"+room_id+"/auth", (json::value const &)jvalue)
+      .then([](http_response response)
+      {
+         if (response.status_code() == status_codes::OK)
+         {
+               std::cout << "Successfully sent layoutchange."<<std::endl;
+            return response.extract_json();
+         }
+         else{
+            std::cout << "Failed to send layoutchange." 
+               << response.status_code() 
+               << std::endl;
+         }
+         return pplx::task_from_result(web::json::value());
+      })
+      .then([](pplx::task<web::json::value> previousTask)
+      {
+         try
+         {
+            web::json::value res = previousTask.get();
+            //display_field_map_json(previousTask.get());
+            if(res.has_field("username")){
+               cb(res["username"]);
+            }else{
+               std::cout<<"Username missing from response!"<<std::endl;
+            }
+         }
+         catch (http_exception const & e)
+         {
+            std::wcout << e.what() << std::endl;
+         }
+      })
+      .wait();
+      
 // 	std::string url = "http://localhost:3005/";
 // 	auto status_code = std::make_shared<web::http::status_code*const>();
 
