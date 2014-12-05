@@ -366,7 +366,7 @@ int OTSipCallback::OnInviteEvent(const InviteEvent* e)
 
 					std::string username = client->auth_user(cookie, brideid);
 
-					if(username == NULL || username.empty()){
+					if(username.empty()){
 						rejectCall(pCallSession, 484, tsk_strnullORempty(pcWrappedMessage->To->uri->user_name) ? "Incomplete destination address" : "Incomplete source address");
 						delete pCallSession, pCallSession = NULL;
 						return 0;
