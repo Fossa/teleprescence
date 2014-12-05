@@ -12,7 +12,7 @@
 #include "opentelepresence/nettransport/OTHttpTransport.h"
 
 //***
-#include "../../../casablanca/server.h"
+#include "../casablanca/server.h"
 
 #include <map>
 #include <list>
