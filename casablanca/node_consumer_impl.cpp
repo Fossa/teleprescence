@@ -16,11 +16,12 @@ using namespace web::http::client;
 std::string int_array_to_string(int int_array[], int size_of_array);
 
 std::string node_consumer_impl::auth_user(std::string cookie, std::string room_id){
+   web::json::value j_cookie;
+   web::json::value jvalue;
    try{
       const ::utility::string_t route = "/api/tp/"+room_id+"/auth";
       try{
-         web::json::value j_cookie = web::json::value::parse(cookie);
-         web::json::value jvalue;
+         j_cookie = web::json::value::parse(cookie);
          jvalue["cookie"] = j_cookie;
          jvalue["room"] = web::json::value::string(room_id);
       }catch(web::json::json_exception e){
