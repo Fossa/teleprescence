@@ -71,7 +71,7 @@ try {
  	
  	return true; 
 
-}catch(std::exeption ee){
+}catch(std::exception ee){
 
 cout << "failed to start"<< ee<<endl;
 
@@ -83,7 +83,7 @@ bool Server::stopListener(){
 
 		listener.close().wait();
 
-	}catch(std::exeption ee){
+	}catch(std::exception ee){
 
 		cout << "failed to start"<< ee <<endl;
 
