@@ -13,6 +13,9 @@
 
 #include "tsk_debug.h"
 
+#include "../casablanca/client.h"
+#include "../casablanca/node_consumer_impl.h"
+
 #include <assert.h>
 
 #define kJsonPresShareResponseState(id, state, pageCount) \
@@ -361,15 +364,15 @@ int OTSipCallback::OnInviteEvent(const InviteEvent* e)
 					std::string brideid = pcWrappedMessage->To->uri->user_name;
 					std::unique_ptr<Client> client(new node_consumer_impl("http://localhost:3005"));
 
-					std::string username = client.auth_user(cookie, brideid);
+					std::string username = client->auth_user(cookie, brideid);
 
-					if(tsk_strnullORempty(username)){
+					if(username.empty()){
 						rejectCall(pCallSession, 484, tsk_strnullORempty(pcWrappedMessage->To->uri->user_name) ? "Incomplete destination address" : "Incomplete source address");
 						delete pCallSession, pCallSession = NULL;
 						return 0;
 					}
 
-					pcWrappedMessage->From->uri->display_name = username.c_str();
+					pcWrappedMessage->From->uri->display_name = &username[0];
 
 					// create bridge identifier from the destination name
 					std::string strBridgeId(pcWrappedMessage->To->uri->user_name);
