@@ -32,7 +32,7 @@ using namespace std;
 
 
 void testAuthUser(std::string cookie, std::string room_id);
-void testLayoutChange(std::string roomId, int layout[], size_t sz);
+void testLayoutChange(std::string roomId, std::string layout[], size_t sz);
 int main(int argc, char*argv[])
 {
 	bool runTestServer = false;	
@@ -62,25 +62,34 @@ int main(int argc, char*argv[])
 	}
 
 	if(runTestAuth){
-		testAuthUser("kaka", "1");
+		std::string kaka = "{"
+													"\"express\": {"
+														"\"sid\": \"s%3AvGJhHCwmjFiekH_89FSeGaHMZzqGNNon.uOrJjSr370lRXakwmIa3zersugTyvxFqxinAQHIqTOk\""
+													"}"
+												"}";
+		testAuthUser(kaka, "1");
 	}
 
 	if(runLayoutChange){
-		testLayoutChange("1", {1, 2, 3}, 3);
+		std::string layout[] = {"1", "2", "3"};
+		testLayoutChange("1", layout, 3);
 	}
 	return 0;
 }
 
 void testAuthUser(std::string cookie, std::string room_id){
 	std::unique_ptr<Client> client_api(new node_consumer_impl("http://localhost:3005"));
-	client_api->auth_user(cookie, room_id, [=](int status, std::string res){
-		assert(status == 200);
-		std::cout<<"TestAuthUser passed!"<<std::endl;
-	});
+	// client_api->auth_user(cookie, room_id, [=](std::string res){
+	// 	if(!res.empty())
+	// 		std::cout<<"TestAuthUser passed!"<<std::endl;
+	// 	else
+	// 		std::cout << "Failed!" << std::endl;
+	// });
+	std::cout << client_api->auth_user(cookie, room_id) <<std::endl;
 }
 
-void testLayoutChange(std::string roomId, int layout[], size_t sz){
+void testLayoutChange(std::string roomId, std::string layout[], size_t sz){
 	std::unique_ptr<Client> client_api(new node_consumer_impl("http://localhost:3005"));
 	// client_api->layout_change(roomId, layout, sz);
-	client_api->layout_change(roomId, std::vector<int>(layout, layout + sz));
+	client_api->layout_change(roomId, std::vector<std::string>(layout, layout + sz));
 }

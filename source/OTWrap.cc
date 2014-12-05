@@ -356,7 +356,21 @@ int OTSipCallback::OnInviteEvent(const InviteEvent* e)
 						delete pCallSession, pCallSession = NULL;
 						return 0;
 					}
-					
+					//std::string cookie = pcWrappedMessage->From->uri->user_name;
+					char* cookie = const_cast<SipMessage*>(pcMessage)->getSipHeaderValue("TP-JobTitle");
+					std::string brideid = pcWrappedMessage->To->uri->user_name;
+					std::unique_ptr<Client> client(new node_consumer_impl("http://localhost:3005"));
+
+					std::string username = client.auth_user(cookie, brideid);
+
+					if(tsk_strnullORempty(username)){
+						rejectCall(pCallSession, 484, tsk_strnullORempty(pcWrappedMessage->To->uri->user_name) ? "Incomplete destination address" : "Incomplete source address");
+						delete pCallSession, pCallSession = NULL;
+						return 0;
+					}
+
+					pcWrappedMessage->From->uri->display_name = username.c_str();
+
 					// create bridge identifier from the destination name
 					std::string strBridgeId(pcWrappedMessage->To->uri->user_name);
 
@@ -420,7 +434,8 @@ int OTSipCallback::OnInviteEvent(const InviteEvent* e)
 						// send 200 OK
 						{
 							// get information from the INVITE request
-							const char* pcDisplayName = tsk_strnullORempty(pcWrappedMessage->From->uri->display_name) ? pcWrappedMessage->From->uri->user_name : pcWrappedMessage->From->uri->display_name;
+							// const char* pcDisplayName = tsk_strnullORempty(pcWrappedMessage->From->uri->display_name) ? pcWrappedMessage->From->uri->user_name : pcWrappedMessage->From->uri->display_name;
+							const char* pcDisplayName = username.c_str();
 							const char* pcUserId = pcWrappedMessage->From->uri->user_name;
 							char* pJobTitle = const_cast<SipMessage*>(pcMessage)->getSipHeaderValue("TP-JobTitle");
 							std::string strDisplayName(pcDisplayName);
