@@ -61,7 +61,7 @@ OTEngine::OTEngine()
 : OTObject()
 , m_bStarted(false)
 , m_uId(++g_uId)
-, speakerListener("http://localhost:3010/api/tp/layoutchange")
+, speakerListener(std::string("http://localhost:3010/api/tp/layoutchange"))
 {
 	if(!OTEngine::g_bInitialized)
 	{
