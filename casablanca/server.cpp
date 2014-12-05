@@ -28,7 +28,7 @@ Server::Server(string uri) {
 
 Server::~Server() { }
 
-void Server::startListener(){
+bool Server::startListener(){
 
 try {
 
@@ -78,7 +78,7 @@ cout << "failed to start"<< ee<<endl;
 }
 
 }
-void Server::stopListener(){
+bool Server::stopListener(){
 	try{
 
 		listener.close().wait();
