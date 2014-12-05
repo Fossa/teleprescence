@@ -416,6 +416,9 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		oSessionInfo = dynamic_cast<OTSessionInfoAV*>(*(*iter).second->getSessionInfo());
 		oAVCall = NULL;
 		oStreamer = NULL;
+		//***
+		std::vector< std::string > tempVec;
+
 		// we must not hold a reference to OTBrige to avoid circular ref
 		// comparing ids is the fastest way to check that we have an active doc streamer
 		if(oSessionInfo->getDocStreamerId() != OPENTELEPRESENCE_INVALID_ID)
@@ -454,9 +457,10 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			// layout changed
 			consumersVector.clear();
 
-			if( _consumers != NULL )
-				pConsumers = _consumers;
+			// if( _consumers != NULL )
+			// 	pConsumers = _consumers;
 
+			// First set everyone to speaker false so we only have one speaker
 			for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
 				(*iter).second->getSessionInfo()->setSpeaker( false );
 			}
@@ -472,7 +476,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 				} else if ( (i + 1) == nConsumers ) {
 					OT_DEBUG_WARN( "Left/Joined No speaker found, setting latest consumer to speaker" );
 					(*iter).second->getSessionInfo()->setSpeaker( true );
-					std::vector< std::string > tempVec;
+					
 					tempVec.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
 					this->setSpeaker( tempVec );
 				}
@@ -483,6 +487,14 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			consumersCount = nConsumers;
 			layoutChanged = true;
 			iter = pConsumers->begin();
+		}
+
+		// Check if speaker has changed from outside to see if we need to change the layout
+		if( consumersSpeaker != (*iter).second->getSessionInfo()->getDisplayName() ) {
+			OT_DEBUG_WARN( "The speaker has changed from client side" );
+			tempVec.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
+			this->setSpeaker( tempVec );
+			layoutChanged = true;
 		}
 
 		if(!bSpeakerFound && ((bIsSpeaker = (*iter).second->getSessionInfo()->isSpeaker()) || ((i + 1) == nConsumers)))
