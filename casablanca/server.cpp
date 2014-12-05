@@ -22,15 +22,17 @@ using namespace std;
 
 Server::Server(string uri) { 
 
-	 str = utility::conversions::to_string_t(uri);
+	 serverUri = uri;
 
 }
 
 Server::~Server() { }
 
-void Server::startListener(){
+bool Server::startListener(){
 
-	this->listener = http_listener(str); 
+try {
+
+	this->listener = http_listener(utility::conversions::to_string_t(serverUri)); 
 
 	listener.support(methods::POST, [this](http_request req)
 	{
@@ -67,9 +69,24 @@ void Server::startListener(){
 
 	listener.open().wait();
  	
-}
-void Server::stopListener(){
+ 	return true; 
 
-	listener.close().wait();
+}catch(std::exeption ee){
+
+cout << "failed to start"<< ee<<endl;
+
+}
+
+}
+bool Server::stopListener(){
+	try{
+
+		listener.close().wait();
+
+	}catch(std::exeption ee){
+
+		cout << "failed to start"<< ee <<endl;
+
+	}
 }
  

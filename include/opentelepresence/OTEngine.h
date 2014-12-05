@@ -11,6 +11,9 @@
 #include "opentelepresence/cfg/OTCfg.h"
 #include "opentelepresence/nettransport/OTHttpTransport.h"
 
+//***
+#include "../casablanca/server.h"
+
 #include <map>
 #include <list>
 #include <string>
@@ -195,9 +198,9 @@ private:
 
 	bool m_bStarted;
 
+ 	Server speakerListener;
+	// Server participantsListener;
 
-	Server s;
-	
 
 };
 

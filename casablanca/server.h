@@ -10,6 +10,7 @@
 #include <cpprest/http_listener.h>
 #include <functional>
 #include <vector>
+#include <string>
 
 using namespace web::http::experimental::listener;
 using namespace web::http;
@@ -24,7 +25,7 @@ public:
 	~Server();
 
 	std::function<void(string,std::vector<string>)> cb;
-	void startListener();
+	bool startListener();
 	void stopListener();
 
 	
@@ -33,7 +34,8 @@ public:
 	 
 private:
 	http_listener listener;
-	string_t str; 
+	string serverUri; 
+	int noOfParticipants;
 };
 
 #endif

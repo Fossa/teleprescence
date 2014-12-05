@@ -40,11 +40,25 @@ int main(int argc, char*argv[])
 	bool runLayoutChange = false;
 
 	if(runTestServer){
-		Server s("http://localhost:3005"); 
+		
+		Server s("http://localhost:3010/api/tp");
+
+		Server t("http://localhost:3010/api/tp2");
 		s.set([](string r, vector<string> v){
-			cout << "success"<<endl;
+			cout <<r<< "::"<<  v.at(0)  <<endl;
 		});
+
+		 int i = t.set2([](string r, vector<string> v){
+			  
+		});
+		 	 	cout << "::"<<  i  <<endl;
+
 		s.startListener();
+		t.startListener();
+
+		fgetc(stdin);
+		s.stopListener();
+		t.stopListener();
 	}
 
 	if(runTestAuth){
