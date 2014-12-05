@@ -26,7 +26,7 @@ public:
 
 	std::function<void(string,std::vector<string>)> cb;
 	bool startListener();
-	void stopListener();
+	bool stopListener();
 
 	
 
