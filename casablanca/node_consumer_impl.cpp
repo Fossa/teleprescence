@@ -125,7 +125,7 @@ void display_field_map_json(web::json::value  jvalue)
 }
 
 void node_consumer_impl::layout_change(std::string room_id, std::vector< std::string > layout){
-
+   try{
 	std::vector<web::json::value> arr = std::vector<web::json::value>();
 	for(auto id : layout){
 		arr.push_back(json::value(id));
@@ -163,4 +163,8 @@ void node_consumer_impl::layout_change(std::string room_id, std::vector< std::st
          }
       })
       .wait();
+   }catch(std::exception e){
+      std::cout << "Exception in consumer layout_change" << std::endl;
+      throw;
+   }
 }
