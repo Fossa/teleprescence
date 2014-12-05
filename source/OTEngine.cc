@@ -192,19 +192,20 @@ bool OTEngine::start()
 
 	OTObjectWrapper<OTBridge*> bridgeWrapper =  getBridge(g_uId, (const long& ) &std::stol(r));
  
-	OTObjectWrapper< OTBridgeInfo*> currentBridge = bridgeWrapper->getInfo();  
+	OTObjectWrapper< OTBridgeInfo*> currentBridge = bridgeWrapper->getInfo();
 
-	currentBridge->setSpeakerSipSessionId(stol(v.at(0)));
+	currentBridge->setSpeakerSipSessionId.setSpeakerSipSessionId(stol(v.at(0)));
 	 
 
-			OT_DEBUG_ERROR("Start Speaker Listener"); 
-		});
+		OT_DEBUG_ERROR("Start Speaker Listener"); 
+		
+	});
 
 
 	}else{
-		OT_DEBUG_ERROR(;
-"Failed to start Speaker Listener stack");
-		ret = -2		goto bail;
+		OT_DEBUG_ERROR("Failed to start Speaker Listener stack");
+		ret = -2;
+		goto bail;
 	}
 
 
