@@ -18,11 +18,15 @@ std::string int_array_to_string(int int_array[], int size_of_array);
 std::string node_consumer_impl::auth_user(std::string cookie, std::string room_id){
    try{
       const ::utility::string_t route = "/api/tp/"+room_id+"/auth";
-      web::json::value j_cookie = web::json::value::parse(cookie);
-      web::json::value jvalue;
-      jvalue["cookie"] = j_cookie;
-      jvalue["room"] = web::json::value::string(room_id);
-
+      try{
+         web::json::value j_cookie = web::json::value::parse(cookie);
+         web::json::value jvalue;
+         jvalue["cookie"] = j_cookie;
+         jvalue["room"] = web::json::value::string(room_id);
+      }catch(web::json::json_exception e){
+         std::cout << "Malformed json." << std::endl;
+         return "";
+      }
       http_client client(U(this->url));
       pplx::task<http_response> resp = client.request(
             methods::POST,
