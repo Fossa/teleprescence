@@ -190,7 +190,7 @@ bool OTEngine::start()
 	if(speakerListener.startListener()){
 		speakerListener.set([](std::string r, vector<std::string> v){
 
-	OTObjectWrapper<OTBridge*> bridgeWrapper =  getBridge(g_uId, atol(r));
+	OTObjectWrapper<OTBridge*> bridgeWrapper =  getBridge(g_uId, (const) &std::stol(r));
  
 	OTObjectWrapper< OTBridgeInfo*> currentBridge = bridgeWrapper->getInfo();
 
