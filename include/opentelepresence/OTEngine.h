@@ -199,7 +199,7 @@ private:
 	bool m_bStarted;
 
  	Server speakerListener;
-	Server participantsListener;
+	// Server participantsListener;
 
 
 };
