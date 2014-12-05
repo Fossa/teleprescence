@@ -372,7 +372,7 @@ int OTSipCallback::OnInviteEvent(const InviteEvent* e)
 						return 0;
 					}
 
-					pcWrappedMessage->From->uri->display_name = username;
+					pcWrappedMessage->From->uri->display_name = username[0];
 
 					// create bridge identifier from the destination name
 					std::string strBridgeId(pcWrappedMessage->To->uri->user_name);
