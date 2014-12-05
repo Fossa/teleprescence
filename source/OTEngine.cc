@@ -61,7 +61,7 @@ OTEngine::OTEngine()
 : OTObject()
 , m_bStarted(false)
 , m_uId(++g_uId)
-, speakerListener(std::string("http://localhost:3010/api/tp/layoutchange"))
+, speakerListener("http://localhost:3010/api/tp/layoutchange")
 {
 	if(!OTEngine::g_bInitialized)
 	{
@@ -190,7 +190,7 @@ bool OTEngine::start()
 	if(speakerListener.startListener()){
 		speakerListener.set([](std::string r, vector<std::string> v){
 
-	OTObjectWrapper<OTBridge*> bridgeWrapper =  getBridge(g_uId, stol(getEngine(r));
+	OTObjectWrapper<OTBridge*> bridgeWrapper =  getBridge(g_uId, stol(r));
  
 	OTObjectWrapper< OTBridgeInfo*> currentBridge = bridgeWrapper->getInfo();
 

@@ -30,6 +30,8 @@ Server::~Server() { }
 
 void Server::startListener(){
 
+try {
+
 	this->listener = http_listener(utility::conversions::to_string_t(serverUri)); 
 
 	listener.support(methods::POST, [this](http_request req)
@@ -67,9 +69,24 @@ void Server::startListener(){
 
 	listener.open().wait();
  	
+ 	return true; 
+
+}catch(std::exeption ee){
+
+cout << "failed to start"<< ee<<endl;
+
+}
+
 }
 void Server::stopListener(){
+	try{
 
-	listener.close().wait();
+		listener.close().wait();
+
+	}catch(std::exeption ee){
+
+		cout << "failed to start"<< ee <<endl;
+
+	}
 }
  
