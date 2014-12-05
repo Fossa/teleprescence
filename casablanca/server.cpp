@@ -38,7 +38,7 @@ try {
 	{
 		req.extract_string(true).then([req,this](utility::string_t body)
 		{
-			wcout << body << endl; 
+			//wcout << utility::conversions::to_utf8string(body) << endl; 
 
 			json::value v = json::value::parse(body); 
 

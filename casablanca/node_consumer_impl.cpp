@@ -15,30 +15,95 @@ using namespace web::http::client;
 
 std::string int_array_to_string(int int_array[], int size_of_array);
 
-void node_consumer_impl::auth_user(std::string cookie, std::string room, std::function<void(int, std::string)> cb){
-// 	std::string url = "http://localhost:3005/";
-// 	auto status_code = std::make_shared<web::http::status_code*const>();
+std::string node_consumer_impl::auth_user(std::string cookie, std::string room_id){
+   try{
+      const ::utility::string_t route = "/api/tp/"+room_id+"/auth";
+      web::json::value j_cookie = web::json::value::parse(cookie);
+      web::json::value jvalue;
+      jvalue["cookie"] = j_cookie;
+      jvalue["room"] = web::json::value::string(room_id);
 
-// 	auto  stream = std::make_shared<std::ostringstream>();
+      http_client client(U(this->url));
+      pplx::task<http_response> resp = client.request(
+            methods::POST,
+            route, 
+            (json::value const &)jvalue
+         );
+      http_response response = resp.get();
+      if (response.status_code() == status_codes::OK)
+      {
+            std::cout << "Successfully sent auth."<<std::endl;
+            web::json::value res = response.extract_json().get();
+            //display_field_map_json(previousTask.get());
+            if(res.has_field("username")){
+               std::string usr_name = utility::conversions::to_utf8string(res["username"].as_string());
+               return usr_name;
+            }else{
+               std::cout<<"Username missing from response!"<<std::endl;
+            }
+      }
+      else{
+         std::cout << "Failed to send auth." 
+            << response.status_code() 
+            << std::endl;
+      }
+      return "";
+   }
+   catch(std::exception e){
+      std::cout << "Error in auth_user." << std::endl;
+      throw; 
+   }
+}
 
-// 	web::http::client::http_client client(U(url));
-// 	web::uri_builder route_builder(U("/api/getme"));
-// 	route_builder.append_query(U("cookie"), U(cookie));
-// 	route_builder.append_query(U("room_id"), room);
+void node_consumer_impl::auth_user(std::string cookie, std::string room_id, std::function<void(std::string)> cb){
+   try{
+      web::json::value j_cookie = web::json::value::parse(cookie);
+      web::json::value jvalue;
+      //jvalue["cookie"] = web::json::value::string(cookie);
+      jvalue["cookie"] = j_cookie;
+      jvalue["room"] = web::json::value::string(room_id);
 
-// 	client.request(web::http::methods::GET, "", route_builder.to_string())
-// 	.then([&](web::http::http_response response){
-// 		return response.extract_json(stream);
-// 	})
-// 	.then([=] (json::value data)->task<void>{
-// 		auto obj = v[L"user"];
-// 		if(obj.has_field(L"user_id")){
-// 			cb(1, obj[L"user_id"]);
-// 		}else{
-// 			cb(0, NULL);
-// 		}
-// 		return;
-// 	}, cb(0, NULL));
+      http_client client(U(this->url));
+      client.request(methods::POST,(const ::utility::string_t) "/api/tp/"+room_id+"/auth", (json::value const &)jvalue)
+         .then([cb](http_response response)
+         {
+            if (response.status_code() == status_codes::OK)
+            {
+                  std::cout << "Successfully sent auth."<<std::endl;
+               return response.extract_json();
+            }
+            else{
+               std::cout << "Failed to send auth." 
+                  << response.status_code() 
+                  << std::endl;
+            }
+            return pplx::task_from_result(web::json::value());
+         })
+         .then([cb](pplx::task<web::json::value> previousTask)
+         {
+            try
+            {
+               web::json::value res = previousTask.get();
+               //display_field_map_json(previousTask.get());
+               if(res.has_field("username")){
+                  std::string usr_name = utility::conversions::to_utf8string(res["username"].as_string());
+                  cb(usr_name);
+               }else{
+                  std::cout<<"Username missing from response!"<<std::endl;
+               }
+            }
+            catch (http_exception const & e)
+            {
+               std::wcout << e.what() << std::endl;
+            }
+         })
+         .wait();
+   }
+   catch(std::exception e){
+      std::cout << "Error in auth_user." << std::endl;
+      cb("");
+      throw; 
+   }
 }
 
 void display_field_map_json(web::json::value  jvalue)
@@ -60,16 +125,6 @@ void display_field_map_json(web::json::value  jvalue)
 }
 
 void node_consumer_impl::layout_change(std::string room_id, std::vector< std::string > layout){
-	// // std::string url = "http://localhost:3005/";
-	// auto arr = json::value::array();
-	// for(int i = 0; i<sz; ++i){
-	// 	arr[i] = json::value(layout[i]);
-	// }
-	// // std::vector<std::pair<::utility::string_t, json::value>> obj;
-	// // obj.push_back(std::pair<::utility::string_t,json::value>(L"layout", arr);
-	// // auto jvalue = json::value::object(obj);
-	// auto jvalue = json::value::parse("{ 'layout' : [] }");
-	// jvalue[std::string("layout")] = arr;
 
 	std::vector<web::json::value> arr = std::vector<web::json::value>();
 	for(auto id : layout){
@@ -108,57 +163,4 @@ void node_consumer_impl::layout_change(std::string room_id, std::vector< std::st
          }
       })
       .wait();
-	// http::status_code status_code;
-
-	// auto  stream = std::make_shared<std::ostringstream>();
-
-
-
-	// http_client client(U(url));
-	// uri_builder builder(U("/api/tp/"+boost::lexical_cast<std::string>(room_id)+"/layoutchange"));
-	// builder.append_query(U("layout"), U(int_array_to_string(layout));
-	// client.request(methods::GET, "", builder.toString())
-	// // Handle response headers
-	// .then([=](http_response response){
-	// 	status_code = response.status_code;
-	// 	return response.body().read_to_end(stream);
-	// })
-	// // Close the stream
-	// .then([=] (size_t){
-	// 	stream->close();
-	// 	cb(status_code(), stream.str);
-	// 	return;
-	// });	
 }
-
-// void make_request(http_client & client, method mtd,  json::value const & jvalue)
-// {
-//    client.request(mtd, jvalue)
-//       .then([](http_response response)
-//       {
-//          if (response.status_code() == status_codes::OK)
-//          {
-//             return response.extract_json();
-//          }
-//          return pplx::task_from_result(json::value());
-//       })
-//       .then([](pplx::task<json::value> previousTask)
-//       {
-//          try
-//          {
-//             display_field_map_json(previousTask.get());
-//          }
-//          catch (http_exception const & e)
-//          {
-//             wcout << e.what() << endl;
-//          }
-//       })
-//       .wait();
-// }
-
-// std::string int_array_to_string(int int_array[], int size_of_array) {
-//   ostringstream oss("");
-//   for (int temp = 0; temp < size_of_array; temp++)
-//     oss << int_array[temp];
-//   return oss.str()
-// }
