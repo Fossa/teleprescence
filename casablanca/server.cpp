@@ -22,7 +22,7 @@ using namespace std;
 
 Server::Server(string uri) { 
 
-	 str = utility::conversions::to_string_t(uri);
+	 serverUri = uri;
 
 }
 
@@ -30,7 +30,7 @@ Server::~Server() { }
 
 void Server::startListener(){
 
-	this->listener = http_listener(str); 
+	this->listener = http_listener(utility::conversions::to_string_t(serverUri)); 
 
 	listener.support(methods::POST, [this](http_request req)
 	{

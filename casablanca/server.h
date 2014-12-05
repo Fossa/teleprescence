@@ -33,7 +33,8 @@ public:
 	 
 private:
 	http_listener listener;
-	string_t str; 
+	string serverUri; 
+	int noOfParticipants;
 };
 
 #endif
