@@ -13,7 +13,7 @@
 
 #include "tsk_debug.h"
 
-#include "../casablanca/Client.h"
+#include "../casablanca/client.h"
 #include "../casablanca/node_consumer_impl.h"
 
 #include <assert.h>
