@@ -25,7 +25,7 @@ public:
 	~Server();
 
 	std::function<void(string,std::vector<string>)> cb;
-	void startListener();
+	bool startListener();
 	void stopListener();
 
 	
