@@ -34,12 +34,13 @@ bool Server::startListener(){
 
 	listener.support(methods::POST, [this](http_request req)
 	{
+		std::cout << "Received request to node listener." << std::endl;
 
 		try {
 			req.extract_string(true).then([req,this](utility::string_t body)
 			{
 				size_t noOfParticipants=0;
-				//wcout << body << endl; 
+				std::cout << utility::conversions::to_utf8string(body) << endl; 
 
 				json::value v = json::value::parse(body); 
 
