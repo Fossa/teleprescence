@@ -61,8 +61,8 @@ OTEngine::OTEngine()
 : OTObject()
 , m_bStarted(false)
 , m_uId(++g_uId)
-, speakerListener("http://localhost:3010/api/tp/layoutchange")
-, participantsListener("http://localhost:3010/api/tp/numberofparticipants")
+, speakerListener("http://127.0.0.1:3010/api/tp/layoutchange")
+, participantsListener("http://127.0.0.1:3010/api/tp/numberofparticipants")
 {
 	if(!OTEngine::g_bInitialized)
 	{
