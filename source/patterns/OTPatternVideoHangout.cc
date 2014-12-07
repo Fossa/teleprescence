@@ -479,7 +479,9 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 
 			// If we haven't found a speaker, we set the first person in the vector to be speaker
 			if( !speakerFound ) {
-				this->setSpeaker( consumersVector );
+				iter = pConsumers->begin();
+				consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
+				(*iter).second->getSessionInfo()->setSpeaker( true );
 			}
 
 			consumersCount = nConsumers;
