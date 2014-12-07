@@ -191,9 +191,10 @@ bool OTEngine::start()
 	if(speakerListener.startListener()){
 		speakerListener.setSpeakerListenerCallback([](std::string r, std::string v){
 
-			 string str_z = r; 
-	OTObjectWrapper<OTBridge*> bridgeWrapper =  getBridge(g_uId, str_z);
-	bridgeWrapper->setSpeakerByDisplayName(v);
+			cout << "Hello gabbe!" << std::endl;
+	// 		 string str_z = r; 
+	// OTObjectWrapper<OTBridge*> bridgeWrapper =  getBridge(g_uId, str_z);
+	// bridgeWrapper->setSpeakerByDisplayName(v);
  
 	// OTObjectWrapper< OTBridgeInfo*> currentBridge = bridgeWrapper->getInfo();
 
