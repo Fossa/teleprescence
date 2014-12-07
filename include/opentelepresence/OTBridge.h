@@ -40,7 +40,7 @@ public:
 	virtual int removeAVCall(uint64_t nSessionId);
 	virtual OTObjectWrapper<OTSipSessionAV*> findCallByUserId(std::string strUserId);
 	/** Kalles **/
-	virtual /*OTObjectWrapper<OTSipSessionAV*>*/void OTBridge::setSpeakerByDisplayName(std::string strDispName);
+	virtual /*OTObjectWrapper<OTSipSessionAV*>*/void setSpeakerByDisplayName(std::string strDispName);
 	virtual OTObjectWrapper<OTSipSessionAV*> findCallBySessionId(uint64_t nSessionId);
 	virtual size_t getNumberOfActiveAVCalls();
 	virtual OT_INLINE OTObjectWrapper<OTBridgeInfo*> getInfo(){ return m_oInfo; }
