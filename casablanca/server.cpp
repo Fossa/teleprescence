@@ -29,7 +29,7 @@ Server::Server(string uri) {
 Server::~Server() { }
 
 bool Server::startListener(){
-
+	std::cout << "Starting REST-route "<<serverUri << std::endl;
 	this->listener = http_listener(utility::conversions::to_string_t(serverUri)); 
 
 	listener.support(methods::POST, [this](http_request req)
@@ -64,7 +64,7 @@ bool Server::startListener(){
 							string part_str= to_string(noOfParticipants);
 							req.reply(status_codes::OK,  "{\" NoofParticipants \" : \"  "  + part_str + " \"}" , "application/json");
 						}
-
+						else throw;
 					}
 					// IF wanting to set speaker
 					else
@@ -76,6 +76,7 @@ bool Server::startListener(){
 						}
 						req.reply(status_codes::OK,  "Success" , "text/plain");
 					}
+
 				}
 
 			});
