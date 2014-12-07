@@ -402,6 +402,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 	}
 
 	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> >::iterator iter;
+	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> >::iterator refIter;
 
 	const size_t nConsumers = pConsumers->size();
 	size_t i;
@@ -489,12 +490,13 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			iter = pConsumers->begin();
 		}
 
-		bool speakerChanged = false;
+		bool speakerChanged = true;
 		// Check if the speaker has changed
+		refIter = iter;
 		for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
 			if( consumersSpeaker ==  (*iter).second->getSessionInfo()->getDisplayName() ) {
 				OT_DEBUG_WARN( "Speaker remains the same" );
-				speakerChanged = true;
+				speakerChanged = false;
 			}
 		}
 
@@ -513,6 +515,8 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 				}
 			}
 		}
+
+		iter = refIter;
 
 		// Check if speaker has changed from outside to see if we need to change the layout
 		// if( consumersSpeaker != (*iter).second->getSessionInfo()->getDisplayName() ) {
