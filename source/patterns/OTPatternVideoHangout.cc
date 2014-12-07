@@ -490,12 +490,13 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		}
 
 		// Check if speaker has changed from outside to see if we need to change the layout
-		if( consumersSpeaker != (*iter).second->getSessionInfo()->getDisplayName() ) {
-			OT_DEBUG_WARN( "The speaker has changed from client side" );
-			tempVec.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
-			this->setSpeaker( tempVec );
-			layoutChanged = true;
-		}
+		// if( consumersSpeaker != (*iter).second->getSessionInfo()->getDisplayName() ) {
+		// 	OT_DEBUG_WARN( "The speaker has changed from client side" );
+		// 	tempVec.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
+		// 	this->setSpeaker( tempVec );
+		// 	consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
+		// 	layoutChanged = true;
+		// }
 
 		if(!bSpeakerFound && ((bIsSpeaker = (*iter).second->getSessionInfo()->isSpeaker()) || ((i + 1) == nConsumers)))
 		{
