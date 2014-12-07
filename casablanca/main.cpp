@@ -37,7 +37,7 @@ int main(int argc, char*argv[])
 {
 	bool runTestServer = false;	
 	bool runTestAuth = true;
-	bool runLayoutChange = false;
+	bool runLayoutChange = true;
 
 	if(runTestServer){
 		

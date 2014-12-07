@@ -151,7 +151,7 @@ void node_consumer_impl::layout_change(std::string room_id, std::vector< std::st
          if (response.status_code() == status_codes::OK)
          {
          		std::cout << "Successfully sent layoutchange."<<std::endl;
-            return response.extract_json();
+            // return response.extract_json();
          }
          // return pplx::task_from_result(web::json::value());
          else{
@@ -159,20 +159,20 @@ void node_consumer_impl::layout_change(std::string room_id, std::vector< std::st
          		<< response.status_code() 
          		<< std::endl;
          }
-         return pplx::task_from_result(web::json::value());
+         // return pplx::task_from_result(web::json::value());
       })
-      .then([](pplx::task<web::json::value> previousTask)
-      {
-         try
-         {
+      // .then([](pplx::task<web::json::value> previousTask)
+      // {
+      //    try
+      //    {
 
-            display_field_map_json(previousTask.get());
-         }
-         catch (http_exception const & e)
-         {
-            std::wcout << e.what() << std::endl;
-         }
-      })
+      //       //display_field_map_json(previousTask.get());
+      //    }
+      //    catch (http_exception const & e)
+      //    {
+      //       std::wcout << e.what() << std::endl;
+      //    }
+      // })
       .wait();
    }catch(std::exception e){
       std::cout << "Exception in consumer layout_change" << std::endl;
