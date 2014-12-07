@@ -11,7 +11,6 @@
 #include <functional>
 #include <vector>
 #include <string>
-
 using namespace web::http::experimental::listener;
 using namespace web::http;
 using namespace web;
@@ -24,22 +23,19 @@ public:
 	Server(string uri);
 	~Server();
 
-	std::function<void(string,std::vector<string>)> cb;
+	std::function<void(string,string)> cb;
 	std::function<size_t(string)> cb2;
 	
 	bool startListener();
 	bool stopListener();
+	void setSpeakerListenerCallback(std::function<void(string ,string)> cb){this->cb = cb;}
+	void setParticipantsListenerCallback(std::function<size_t(string)> cb2){this->cb2 = cb2;}
 
-	
-
-	void set(std::function<void(string ,vector<string>)> cb){this->cb = cb;}
-
-	void set(std::function<size_t(string)> cb2){this->cb2 = cb2;}
-	 
 private:
 	http_listener listener;
 	string serverUri; 
-	int noOfParticipants;
+ 
+
 };
 
 #endif

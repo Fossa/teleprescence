@@ -198,8 +198,8 @@ private:
 
 	bool m_bStarted;
 
- 	Server speakerListener;
-	// Server participantsListener;
+ 	Server speakerListener("thewire.deckmar.net:3010/api/tp/layoutchange");
+	Server participantsListener("thewire.deckmar.net:3010/api/tp/numberofparticipants");
 
 
 };

@@ -188,14 +188,14 @@ bool OTEngine::start()
 	
 
 	if(speakerListener.startListener()){
-		speakerListener.setSpeakerListenerCallback([](std::string r, vector<std::string> v){
+		speakerListener.setSpeakerListenerCallback([](std::string r, std::string v){
 
 			 string str_z = r; 
 	OTObjectWrapper<OTBridge*> bridgeWrapper =  getBridge(g_uId, str_z);
  
 	OTObjectWrapper< OTBridgeInfo*> currentBridge = bridgeWrapper->getInfo();
 
-	currentBridge->setSpeakerSipSessionId(stol(v.at(0)));
+	currentBridge->setSpeakerSipSessionId(stol(v));
 	 
 
 		OT_DEBUG_ERROR("Start Speaker Listener"); 
@@ -211,7 +211,7 @@ bool OTEngine::start()
 
 
 if(participantsListener.startListener()){
-		participantsListener.setParticpantListenerCallback([](std::string r){
+		participantsListener.setParticpantsListenerCallback([](std::string r){
 	
 	string str_z = r;
 
