@@ -65,7 +65,10 @@ bool Server::startListener(){
 							string part_str= to_string(noOfParticipants);
 							req.reply(status_codes::OK,  "{\" NoofParticipants \" : \"  "  + part_str + " \"}" , "application/json");
 						}
-						else throw;
+						else{
+							std::cout << "server.cb2 not set." << std::endl;
+						 throw std::exception();
+						}
 					}
 					// IF wanting to set speaker
 					else
