@@ -199,7 +199,7 @@ bool OTEngine::start()
 	currentBridge->setSpeakerSipSessionId(stol(v));
 	 
 
-		OT_DEBUG_ERROR("Start Speaker Listener"); 
+		//OT_DEBUG_ERROR("Start Speaker Listener"); 
 		
 	});
 
