@@ -465,6 +465,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 				(*iter).second->getSessionInfo()->setSpeaker( false );
 			}
 
+			bool speakerFound = false;
 			for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
 				// Build layout vector
 				consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
@@ -472,17 +473,14 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 				if( consumersSpeaker == (*iter).second->getSessionInfo()->getDisplayName() ) {
 					OT_DEBUG_WARN( "Left/Join Speaker found" );
 					(*iter).second->getSessionInfo()->setSpeaker( true );
-				// If no speaker is found, set the last person to speaker
-				} else if ( (i + 1) == nConsumers ) {
-					OT_DEBUG_WARN( "Left/Joined No speaker found, setting latest consumer to speaker" );
-					(*iter).second->getSessionInfo()->setSpeaker( true );
-					
-					tempVec.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
-					this->setSpeaker( tempVec );
+					speakerFound = true;
 				}
 			}
 
-			// std::reverse( consumersVector.begin(), consumersVector.end() );
+			// If we haven't found a speaker, we set the first person in the vector to be speaker
+			if( !speakerFound ) {
+				this->setSpeaker( consumersVector );
+			}
 
 			consumersCount = nConsumers;
 			layoutChanged = true;
@@ -508,7 +506,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			// 	// consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
 			// 	layoutChanged = true;
 			// }
-				
+			
 			bIsSpeaker = true;
 			bSpeakerFound = true;
 		}
