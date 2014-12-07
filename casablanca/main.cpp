@@ -41,32 +41,33 @@ int main(int argc, char*argv[])
 
 	if(runTestServer){
 		
-		Server s("http://localhost:3010/api/tp");
+		// Server s("http://localhost:3010/api/tp");
 
-		Server t("http://localhost:3010/api/tp2");
-		s.set([](string r, vector<string> v){
-			cout <<r<< "::"<<  v.at(0)  <<endl;
-		});
+		// Server t("http://localhost:3010/api/tp2");
+		// s.set([](string r, vector<string> v){
+		// 	cout <<r<< "::"<<  v.at(0)  <<endl;
+		// });
 
-		 int i = t.set2([](string r, vector<string> v){
+		//  int i = t.set2([](string r, vector<string> v){
 			  
-		});
-		 	 	cout << "::"<<  i  <<endl;
+		// });
+		//  	 	cout << "::"<<  i  <<endl;
 
-		s.startListener();
-		t.startListener();
+		// s.startListener();
+		// t.startListener();
 
-		fgetc(stdin);
-		s.stopListener();
-		t.stopListener();
+		// fgetc(stdin);
+		// s.stopListener();
+		// t.stopListener();
 	}
 
 	if(runTestAuth){
-		std::string kaka = "{"
-													"\"express\": {"
-														"\"sid\": \"s%3AvGJhHCwmjFiekH_89FSeGaHMZzqGNNon.uOrJjSr370lRXakwmIa3zersugTyvxFqxinAQHIqTOk\""
-													"}"
-												"}";
+		// std::string kaka = "{"
+		// 											"\"express\": {"
+		// 												"\"sid\": \"s%3AvGJhHCwmjFiekH_89FSeGaHMZzqGNNon.uOrJjSr370lRXakwmIa3zersugTyvxFqxinAQHIqTOk\""
+		// 											"}"
+		// 										"}";
+		std::string kaka = "s%3AvGJhHCwmjFiekH_89FSeGaHMZzqGNNon.uOrJjSr370lRXakwmIa3zersugTyvxFqxinAQHIqTOk";
 		testAuthUser(kaka, "1");
 	}
 

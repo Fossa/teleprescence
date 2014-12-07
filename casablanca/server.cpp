@@ -39,7 +39,7 @@ bool Server::startListener(){
 			req.extract_string(true).then([req,this](utility::string_t body)
 			{
 				size_t noOfParticipants=0;
-				wcout << body << endl; 
+				//wcout << body << endl; 
 
 				json::value v = json::value::parse(body); 
 

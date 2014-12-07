@@ -21,8 +21,14 @@ std::string node_consumer_impl::auth_user(std::string cookie, std::string room_i
    try{
       const ::utility::string_t route = "/api/tp/"+room_id+"/auth";
       try{
-         j_cookie = web::json::value::parse(cookie);
-         jvalue["cookie"] = j_cookie;
+         //j_cookie = web::json::value::parse(cookie);
+         //jvalue["cookie"] = j_cookie;
+         web::json::value sid;
+         sid["sid"] = web::json::value::string(cookie);
+         web::json::value express;
+         express["express"] = sid;
+         jvalue["cookie"] = express;
+
          jvalue["room"] = web::json::value::string(room_id);
       }catch(web::json::json_exception e){
          std::cout << "Malformed json." << std::endl;
