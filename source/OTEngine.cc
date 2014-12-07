@@ -212,7 +212,7 @@ bool OTEngine::start()
 
 
 if(participantsListener.startListener()){
-		participantsListener.setParticpantsListenerCallback([](std::string r){
+		participantsListener.setParticpantsListenerCallback([](std::string r)->size_t{
 	
 	string str_z = r;
 
