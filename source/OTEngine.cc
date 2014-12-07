@@ -193,10 +193,11 @@ bool OTEngine::start()
 
 			 string str_z = r; 
 	OTObjectWrapper<OTBridge*> bridgeWrapper =  getBridge(g_uId, str_z);
+	bridgeWrapper->setSpeakerByDisplayName(v);
  
-	OTObjectWrapper< OTBridgeInfo*> currentBridge = bridgeWrapper->getInfo();
+	// OTObjectWrapper< OTBridgeInfo*> currentBridge = bridgeWrapper->getInfo();
 
-	currentBridge->setSpeakerSipSessionId(stol(v));
+	// currentBridge->setSpeakerSipSessionId(stol(v));
 	 
 
 		//OT_DEBUG_ERROR("Start Speaker Listener"); 

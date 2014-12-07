@@ -173,6 +173,23 @@ OTObjectWrapper<OTSipSessionAV*> OTBridge::findCallByUserId(std::string strUserI
 	return NULL;
 }
 
+/** Kalles **/
+/*OTObjectWrapper<OTSipSessionAV*>*/void OTBridge::setSpeakerByDisplayName(std::string strDispName)
+{
+	std::map<uint64_t, OTObjectWrapper<OTSipSessionAV*> > oAVCalls = m_oAVCalls; // copy() for thread safety
+	std::map<uint64_t, OTObjectWrapper<OTSipSessionAV*> >::const_iterator iter;
+	for(iter = oAVCalls.begin(); iter != oAVCalls.end(); ++iter)
+	{
+		if(iter->second->getInfo()->getDisplayName() == strDispName)
+		{
+			iter->second->getInfo()->setSpeaker(true);
+		}else{
+			iter->second->getInfo()->setSpeaker(false);
+		}
+	}
+	//return NULL;
+}
+
 OTObjectWrapper<OTSipSessionAV*> OTBridge::findCallBySessionId(uint64_t nSessionId)
 {
 	std::map<uint64_t, OTObjectWrapper<OTSipSessionAV*> > oAVCalls = m_oAVCalls; // copy() for thread safety
