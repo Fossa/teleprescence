@@ -25,12 +25,16 @@ public:
 	~Server();
 
 	std::function<void(string,std::vector<string>)> cb;
+	std::function<size_t(string)> cb2;
+	
 	bool startListener();
 	bool stopListener();
 
 	
 
 	void set(std::function<void(string ,vector<string>)> cb){this->cb = cb;}
+
+	void set(std::function<size_t(string)> cb2){this->cb2 = cb2;}
 	 
 private:
 	http_listener listener;

@@ -188,7 +188,7 @@ bool OTEngine::start()
 	
 
 	if(speakerListener.startListener()){
-		speakerListener.set([](std::string r, vector<std::string> v){
+		speakerListener.setSpeakerListenerCallback([](std::string r, vector<std::string> v){
 
 			 string str_z = r; 
 	OTObjectWrapper<OTBridge*> bridgeWrapper =  getBridge(g_uId, str_z);
@@ -208,6 +208,31 @@ bool OTEngine::start()
 		ret = -2;
 		goto bail;
 	}
+
+
+if(participantsListener.startListener()){
+		participantsListener.setParticpantListenerCallback([](std::string r){
+	
+	string str_z = r;
+
+	OTObjectWrapper<OTBridge*> bridgeWrapper =  getBridge(g_uId, str_z);
+ 	
+ 	return bridgeWrapper->getNumberOfActiveAVCalls();
+ 
+		
+	});
+
+
+	}else{
+		OT_DEBUG_ERROR("Failed to start Participants Listener stack");
+		ret = -2;
+		goto bail;
+	}
+
+
+
+
+
 
 
 bail:

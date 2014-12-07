@@ -72,6 +72,9 @@ try {
  	return true; 
 
 }catch(std::exception ee){
+
+std::cout << "failed to start listener function from server.cpp"; 
+
  return false;
 
 }
