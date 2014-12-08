@@ -616,7 +616,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 				// consumersVector.erase( consumersVector.begin() + index );
 				// consumersVector.insert( consumersVector.begin(), consumersSpeaker );
 				std::swap( consumersVector[0], consumersVector[ index ] );
-				std::swap( pConsumers[0]->second, pConsumers[index]->second );
+				std::swap( pConsumers.begin()->second, pConsumers.find( consumersSpeaker )->second );
 				break;
 			}
 		}
