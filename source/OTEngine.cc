@@ -832,6 +832,7 @@ bool OTEngine::setPresentationSharingAppPath(std::string strPresentationSharingA
 }
 
 bool OTEngine::setNodeURI(std::string uri){
+	std::cout << "OTEngine::setNodeURI() " << uri << std::endl;
 	m_oInfo->m_node_uri = uri;
 	return true;
 }
