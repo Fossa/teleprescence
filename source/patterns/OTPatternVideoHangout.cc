@@ -533,7 +533,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			//Check if the speaker has changed, then we need to inform that the layout needs to change
 			
 			if( consumersSpeaker != (*iter).second->getSessionInfo()->getDisplayName() ) {
-				OT_DEBUG_WARN( "Speaker has changed in mix " );
+				OT_DEBUG_WARN( "Speaker has been changed by client" );
 				consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
 				layoutChanged = true;
 			}
@@ -616,6 +616,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 				// consumersVector.erase( consumersVector.begin() + index );
 				// consumersVector.insert( consumersVector.begin(), consumersSpeaker );
 				std::swap( consumersVector[0], consumersVector[ index ] );
+				std::swap( pConsumers[0]->second, pConsumers[index]->second );
 				break;
 			}
 		}
