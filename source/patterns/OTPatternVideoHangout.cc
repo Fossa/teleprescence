@@ -490,33 +490,33 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			iter = pConsumers->begin();
 		}
 
-		bool speakerChanged = true;
-		// Check if the speaker has changed
-		refIter = iter;
-		for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
-			if( consumersSpeaker ==  (*iter).second->getSessionInfo()->getDisplayName() ) {
-				OT_DEBUG_WARN( "Speaker remains the same" );
-				speakerChanged = false;
-			}
-		}
+		// bool speakerChanged = true;
+		// // Check if the speaker has changed
+		// refIter = iter;
+		// for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
+		// 	if( consumersSpeaker ==  (*iter).second->getSessionInfo()->getDisplayName() ) {
+		// 		OT_DEBUG_WARN( "Speaker remains the same" );
+		// 		speakerChanged = false;
+		// 	}
+		// }
 
-		if( speakerChanged ) {
-			OT_DEBUG_WARN( "Speaker has changed" );
-			// layout changed
-			consumersVector.clear();
-			layoutChanged = true;
+		// if( speakerChanged ) {
+		// 	OT_DEBUG_WARN( "Speaker has changed" );
+		// 	// layout changed
+		// 	consumersVector.clear();
+		// 	layoutChanged = true;
 
-			// Find the new speaker
-			for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
-				// Build layout vector
-				consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
-				if( (*iter).second->getSessionInfo()->isSpeaker() ) {
-					consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
-				}
-			}
-		}
+		// 	// Find the new speaker
+		// 	for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
+		// 		// Build layout vector
+		// 		consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
+		// 		if( (*iter).second->getSessionInfo()->isSpeaker() ) {
+		// 			consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
+		// 		}
+		// 	}
+		// }
 
-		iter = refIter;
+		// iter = refIter;
 
 		// Check if speaker has changed from outside to see if we need to change the layout
 		// if( consumersSpeaker != (*iter).second->getSessionInfo()->getDisplayName() ) {
@@ -530,13 +530,13 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		if(!bSpeakerFound && ((bIsSpeaker = (*iter).second->getSessionInfo()->isSpeaker()) || ((i + 1) == nConsumers)))
 		{
 			//***
-			// Check if the speaker has changed, then we need to inform that the layout needs to change
+			//Check if the speaker has changed, then we need to inform that the layout needs to change
 			
-			// if( consumersSpeaker != (*iter).second->getSessionInfo()->getDisplayName() ) {
-			// 	OT_DEBUG_WARN( "Speaker has changed in mix " );
-			// 	// consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
-			// 	layoutChanged = true;
-			// }
+			if( consumersSpeaker != (*iter).second->getSessionInfo()->getDisplayName() ) {
+				OT_DEBUG_WARN( "Speaker has changed in mix " );
+				consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
+				layoutChanged = true;
+			}
 			
 			bIsSpeaker = true;
 			bSpeakerFound = true;
