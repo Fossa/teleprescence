@@ -186,7 +186,7 @@ bool OTEngine::start()
 
 //***
 	 
-	std::string node_uri = m_oInfo->m_node_uri;
+	std::string server_uri = m_oInfo->m_node_uri;
 	speakerListener.reset(new Server(node_uri+std::string("/api/tp/layoutchange")));
 	if(speakerListener->startListener()){
 		speakerListener->setSpeakerListenerCallback([](std::string r, std::string v){
