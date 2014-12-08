@@ -188,8 +188,8 @@ bool OTEngine::start()
 	 
 	std::string node_uri = m_oInfo->m_node_uri;
 	speakerListener.reset(new Server(node_uri+std::string("/api/tp/layoutchange")));
-	if(speakerListener.startListener()){
-		speakerListener.setSpeakerListenerCallback([](std::string r, std::string v){
+	if(speakerListener->startListener()){
+		speakerListener->setSpeakerListenerCallback([](std::string r, std::string v){
 
 			cout << "Hello gabbe!" << std::endl;
 			 string str_z = r; 
@@ -213,8 +213,8 @@ bool OTEngine::start()
 	}
 
 participantsListener.reset(new Server(node_uri+std::string("/api/tp/numberofparticipants")));
-if(participantsListener.startListener()){
-		participantsListener.setParticipantsListenerCallback([](std::string r)->size_t{
+if(participantsListener->startListener()){
+		participantsListener->setParticipantsListenerCallback([](std::string r)->size_t{
 	
 	string str_z = r;
 
@@ -295,7 +295,7 @@ bool OTEngine::stop()
 	}
 
 //***
-	if(speakerListener.stopListener()){
+	if(speakerListener->stopListener()){
 	OT_DEBUG_ERROR("Stop Speaker Listener");
 
 	}else{
@@ -304,14 +304,14 @@ bool OTEngine::stop()
 		goto bail;
 	}
 
-// if(participantsListener.stopListener()){
-// 	OT_DEBUG_ERROR("Stop Participants Listener");
+if(participantsListener->stopListener()){
+	OT_DEBUG_ERROR("Stop Participants Listener");
 
-// 	}else{
-// 		OT_DEBUG_ERROR("Failed to stop Participants Listener stack");
-// 		ret = -2;
-// 		goto bail;
-// 	}
+	}else{
+		OT_DEBUG_ERROR("Failed to stop Participants Listener stack");
+		ret = -2;
+		goto bail;
+	}
 
 
 
