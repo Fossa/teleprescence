@@ -105,6 +105,7 @@ private:
 class OTEngine : public OTObject
 {
 	friend class OTSipCallback;
+	friend class OTBridgeInfo;
 protected:
 	OTEngine();
 public:
