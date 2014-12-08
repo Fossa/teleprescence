@@ -185,58 +185,31 @@ bool OTEngine::start()
 	}
 
 //***
-	 
-	std::string server_uri = m_oInfo->m_node_uri;
-	speakerListener.reset(new Server(node_uri+std::string("/api/tp/layoutchange")));
+	speakerListener.reset(new Server(m_oInfo->m_node_uri+std::string("/api/tp/layoutchange")));
 	if(speakerListener->startListener()){
 		speakerListener->setSpeakerListenerCallback([](std::string r, std::string v){
-
 			cout << "Hello gabbe!" << std::endl;
-			 string str_z = r; 
-	OTObjectWrapper<OTBridge*> bridgeWrapper =  getBridge(g_uId, str_z);
-	bridgeWrapper->setSpeakerByDisplayName(v);
- 
-	// OTObjectWrapper< OTBridgeInfo*> currentBridge = bridgeWrapper->getInfo();
-
-	// currentBridge->setSpeakerSipSessionId(stol(v));
-	 
-
-		//OT_DEBUG_ERROR("Start Speaker Listener"); 
-		
-	});
-
-
+			string str_z = r; 
+			OTObjectWrapper<OTBridge*> bridgeWrapper =  getBridge(g_uId, str_z);
+			bridgeWrapper->setSpeakerByDisplayName(v);
+		});
 	}else{
 		OT_DEBUG_ERROR("Failed to start Speaker Listener stack");
 		ret = -2;
 		goto bail;
 	}
 
-participantsListener.reset(new Server(node_uri+std::string("/api/tp/numberofparticipants")));
-if(participantsListener->startListener()){
+	participantsListener.reset(new Server(m_oInfo->m_node_uri+std::string("/api/tp/numberofparticipants")));
+	if(participantsListener->startListener()){
 		participantsListener->setParticipantsListenerCallback([](std::string r)->size_t{
-	
-	string str_z = r;
-
-	OTObjectWrapper<OTBridge*> bridgeWrapper =  getBridge(g_uId, str_z);
- 	
- 	return bridgeWrapper->getNumberOfActiveAVCalls();
- 
-		
-	});
-
-
+			OTObjectWrapper<OTBridge*> bridgeWrapper =  getBridge(g_uId, r);
+ 			return bridgeWrapper->getNumberOfActiveAVCalls();		
+		});
 	}else{
 		OT_DEBUG_ERROR("Failed to start Participants Listener stack");
 		ret = -2;
 		goto bail;
 	}
-
-
-
-
-
-
 
 bail:
 	
