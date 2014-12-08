@@ -622,7 +622,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 
 		// Swap listener and speaker in stream
 		for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
-			if( (*iter).second == consumersSpeaker ) {
+			if( (*iter).second->getSessionInfo()->getDisplayName() == consumersSpeaker ) {
 				std::swap( pConsumers->begin()->second, (*iter).second );
 				break;
 			}
