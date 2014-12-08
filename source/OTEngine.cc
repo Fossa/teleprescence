@@ -61,8 +61,8 @@ OTEngine::OTEngine()
 : OTObject()
 , m_bStarted(false)
 , m_uId(++g_uId)
-, speakerListener("http://127.0.0.1:3010/api/tp/layoutchange")
-, participantsListener("http://127.0.0.1:3010/api/tp/numberofparticipants")
+// , speakerListener("http://127.0.0.1:3010/api/tp/layoutchange")
+// , participantsListener("http://127.0.0.1:3010/api/tp/numberofparticipants")
 {
 	if(!OTEngine::g_bInitialized)
 	{
@@ -186,8 +186,8 @@ bool OTEngine::start()
 
 //***
 	 
-	
-
+	std::string node_uri = m_oInfo->m_node_uri;
+	speakerListener.reset(new Server(node_uri+std::string("/api/tp/layoutchange")));
 	if(speakerListener.startListener()){
 		speakerListener.setSpeakerListenerCallback([](std::string r, std::string v){
 
@@ -212,7 +212,7 @@ bool OTEngine::start()
 		goto bail;
 	}
 
-
+participantsListener.reset(new Server(node_uri+std::string("/api/tp/numberofparticipants")));
 if(participantsListener.startListener()){
 		participantsListener.setParticipantsListenerCallback([](std::string r)->size_t{
 	
@@ -858,6 +858,11 @@ bool OTEngine::setPresentationSharingAppPath(std::string strPresentationSharingA
 	return true;
 }
 
+bool OTEngine::setNodeURI(std::string uri){
+	m_oInfo->m_node_uri = uri;
+	return true;
+}
+
 bool OTEngine::setConfFile(const char* pcConfFileFullPath)
 {
 	bool bRet = false;
@@ -1227,7 +1232,7 @@ bool OTEngine::setConfFile(const char* pcConfFileFullPath)
 		/////////////////
 		else if (tsk_striequals("NODE", (*iterSection)->getName())){
 			const std::list<OTObjectWrapper<OTCfgParam *> >*pParams = (*iterSection)->getParams();
-			/* BEGIN[GLOBAL] */
+			/* BEGIN[NODE] */
 			for(iterParam = pParams->begin(); iterParam != pParams->end(); ++iterParam)
 			{
 				TSK_OBJECT_SAFE_FREE(pParamValues);
@@ -1235,18 +1240,18 @@ bool OTEngine::setConfFile(const char* pcConfFileFullPath)
 				pcParamName = (*iterParam)->getName();
 				pcParamValue = (*iterParam)->getValue();
 				OT_DEBUG_INFO_EX(kOTMobuleNameCfg, "%s = %s", pcParamName, pcParamValue);
-				if(tsk_striequals("host", pcParamName))
+				if(tsk_striequals("server", pcParamName))
 				{
-					//setPresentationSharingLocalPort(atoi(pcParamValue));
+					setNodeURI(pcParamValue);
 				}
-				else if(tsk_striequals("server_port", pcParamName))
-				{
-					// setPresentationSharingLocalPort(atoi(pcParamValue));
-				}
-				else if(tsk_striequals("interface", pcParamName))
-				{
-					// setPresentationSharingLocalPort(atoi(pcParamValue));
-				}
+				// else if(tsk_striequals("server_port", pcParamName))
+				// {
+				// 	// setPresentationSharingLocalPort(atoi(pcParamValue));
+				// }
+				// else if(tsk_striequals("interface", pcParamName))
+				// {
+				// 	// setPresentationSharingLocalPort(atoi(pcParamValue));
+				// }
 			}
 		} /* END[NODE] */
 	}

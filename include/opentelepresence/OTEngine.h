@@ -60,6 +60,7 @@ public:
 		, m_strPresentationSharingBaseFolder(OPENTELEPRESENCE_PRESENTATION_SHARING_BASE_FOLDER)
 		, m_nPresentationSharingLocalPort(OPENTELEPRESENCE_PRESENTATION_SHARING_PROCESS_LOCAL_PORT)
 		, m_strPresentationSharingAppPath(OPENTELEPRESENCE_PRESENTATION_SHARING_APP_PATH)
+		, m_node_uri(NODE_URI)
 
 		, m_bSSLMutualAuth(false)
 	{
@@ -97,6 +98,8 @@ private:
 
 	std::string m_strSSLPrivateKey, m_strSSLPublicKey, m_strSSLCA;
 	bool m_bSSLMutualAuth;
+
+	std::string m_node_uri; /**Kalles*/
 };
 
 class OTEngine : public OTObject
@@ -164,6 +167,7 @@ public:
 	virtual bool setPresentationSharingLocalPort(unsigned short nPresentationSharingLocalPort);
 	virtual bool setPresentationSharingAppPath(std::string strPresentationSharingAppPath);
 	virtual bool setConfFile(const char* pcConfFileFullPath);
+	virtual bool setNodeURI(std::string uri);
 	
 	static OTObjectWrapper<OTEngine*> getEngine(uint64_t uId);
 	static OTObjectWrapper<OTBridge*> getBridge(uint64_t uEngineId, std::string strBridgeId);
@@ -198,8 +202,8 @@ private:
 
 	bool m_bStarted;
 
- 	Server speakerListener;
-	Server participantsListener;
+ 	std::unique_ptr<Server> speakerListener;
+	std::unique_ptr<Server> participantsListener;
 
 
 };
