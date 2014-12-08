@@ -27,6 +27,9 @@ public:
 
 	OTObjectWrapper<OTBridge*> getBridge();
 
+	/**Kalles*/
+	std::string getNodeURI();
+
 	OT_INLINE uint64_t getSpeakerSipSessionId() { return m_nSpeakerSipSessionId; }
 	OT_INLINE void setSpeakerSipSessionId(uint64_t nId) { m_nSpeakerSipSessionId = nId; }
 

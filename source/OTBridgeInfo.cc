@@ -66,3 +66,12 @@ OTObjectWrapper<OTBridge*> OTBridgeInfo::getBridge()
 	}
 	return NULL;
 }
+
+std::string OTBridgeInfo::getNodeURI(){
+	OTObjectWrapper<OTEngine*> oEngine = OTEngine::getEngine(m_uEngineId);
+	if(oEngine)
+	{
+		return oEngine->m_oInfo->m_node_uri;
+	}
+	return NULL;
+}
