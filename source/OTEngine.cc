@@ -220,7 +220,7 @@ if(participantsListener.startListener()){
 
 	OTObjectWrapper<OTBridge*> bridgeWrapper =  getBridge(g_uId, str_z);
  	
- 	return bridgeWrapper->getNumberOfActiveAVCalls();
+ 	return ((bridgeWrapper) ? bridgeWrapper->getNumberOfActiveAVCalls() : 0);
  
 		
 	});
