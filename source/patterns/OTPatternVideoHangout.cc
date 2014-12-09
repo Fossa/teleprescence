@@ -589,7 +589,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		// mix() listener (speaker is also mixed as listener)
 
 		//***
-		if( (*iter).second->getSessionInfo()->getSharingScreen() ) {
+		if( !(*iter).second->getSessionInfo()->getSharingScreen() ) {
 			if(bIsSpeaker) {
 				_mixSpeaker(
 						(*iter).second, 
