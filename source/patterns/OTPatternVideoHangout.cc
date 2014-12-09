@@ -417,6 +417,8 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			i--;
 			nListenerIndex--;
 			nConsumers--;
+			consumersCount--;
+			OT_DEBUG_WARN( "Continue" );
 			continue;
 		}
 
@@ -455,7 +457,6 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
 			consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
 			(*iter).second->getSessionInfo()->setSpeaker(true);
-
 			layoutChanged = true;
 		}
 
@@ -497,10 +498,10 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 						}
 					}
 				} 
-				// else {
+				else {
 				// 	screenSharers.erase(std::remove(screenSharers.begin(), screenSharers.end(), (*iter).second->getSessionInfo()->getDisplayName() ), screenSharers.end() );
-				// 	(*iter).second->getSessionInfo()->isSharingScreen( false );
-				// }
+					(*iter).second->getSessionInfo()->isSharingScreen( false );
+				}
 			}
 
 			// If we haven't found a speaker, we set the first person in the vector to be speaker
@@ -604,6 +605,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 
 		//***
 		// if( !(*iter).second->getSessionInfo()->getSharingScreen() ) {
+			OT_DEBUG_WARN("Before mix");
 			if(bIsSpeaker) {
 				_mixSpeaker(
 						(*iter).second, 
@@ -624,6 +626,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 				// mix() Speaker
 				nListenerIndex++;
 			}
+			OT_DEBUG_WARN( "After mix " );
 		// } else {
 		// 	nListenerIndex--;
 		// }
