@@ -404,8 +404,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> >::iterator iter;
 	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> >::iterator refIter;
 
-	const size_t nConsumers = pConsumers->size();
-	size_t realConsumers = nConsumers;
+	size_t nConsumers = pConsumers->size();
 	size_t i;
 
 	//***
@@ -414,6 +413,13 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 
 	for(iter = pConsumers->begin(), i = 0; iter != pConsumers->end(); ++iter, ++i, bIsSpeaker = false)
 	{
+		if( (*iter).second->getSessionInfo()->getSharingScreen() ) {
+			i--;
+			nListenerIndex--;
+			nConsumers--;
+			continue;
+		}
+
 		oFrameVideo = (*iter).second->getHeldFrameVideo();
 		oSessionInfo = dynamic_cast<OTSessionInfoAV*>(*(*iter).second->getSessionInfo());
 		oAVCall = NULL;
@@ -477,24 +483,24 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 
 				// Add screen sharing info to those who are sharing their screen
 				if( (*iter).second->getSessionInfo()->getVideoType() == "screen-share" ) {
-					realConsumers--;
 					OT_DEBUG_WARN( "Screen sharer detected" );
 					for( refIter = pConsumers->begin() ; refIter != pConsumers->end() ; refIter++ ) {
 						if( (*iter).second->getSessionInfo()->getDisplayName() == (*refIter).second->getSessionInfo()->getDisplayName() ) {
-							if( (*iter).second->getSessionInfo()->isSpeaker() ) {
-								(*iter).second->getSessionInfo()->setSpeaker( false );
-								(*refIter).second->getSessionInfo()->setSpeaker( true );
-							}
+							// if( (*iter).second->getSessionInfo()->isSpeaker() ) {
+							// 	(*iter).second->getSessionInfo()->setSpeaker( false );
+							// 	(*refIter).second->getSessionInfo()->setSpeaker( true );
+							// }
 
 							(*refIter).second->getSessionInfo()->isSharingScreen( true );
-							screenSharers.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
+							// screenSharers.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
 							break;
 						}
 					}
-				} else {
-					screenSharers.erase(std::remove(screenSharers.begin(), screenSharers.end(), (*iter).second->getSessionInfo()->getDisplayName() ), screenSharers.end() );
-					(*iter).second->getSessionInfo()->isSharingScreen( false );
-				}
+				} 
+				// else {
+				// 	screenSharers.erase(std::remove(screenSharers.begin(), screenSharers.end(), (*iter).second->getSessionInfo()->getDisplayName() ), screenSharers.end() );
+				// 	(*iter).second->getSessionInfo()->isSharingScreen( false );
+				// }
 			}
 
 			// If we haven't found a speaker, we set the first person in the vector to be speaker
@@ -546,7 +552,8 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		// 	layoutChanged = true;
 		// }
 
-		if(!bSpeakerFound && ((bIsSpeaker = (*iter).second->getSessionInfo()->isSpeaker()) || ((i + 1) == nConsumers)))
+		// if(!bSpeakerFound && ((bIsSpeaker = (*iter).second->getSessionInfo()->isSpeaker()) || ((i + 1) == nConsumers)))
+		if(!bSpeakerFound && ((bIsSpeaker = (*iter).second->getSessionInfo()->isSpeaker()) ))
 		{
 			//***
 			//Check if the speaker has changed, then we need to inform that the layout needs to change
@@ -596,12 +603,12 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		// mix() listener (speaker is also mixed as listener)
 
 		//***
-		if( !(*iter).second->getSessionInfo()->getSharingScreen() ) {
+		// if( !(*iter).second->getSessionInfo()->getSharingScreen() ) {
 			if(bIsSpeaker) {
 				_mixSpeaker(
 						(*iter).second, 
 						m_pFrameMix, 
-						realConsumers,
+						nConsumers,
 						m_parSpeaker,
 						(oStreamer && oStreamer->isOpened()) ? *oStreamer : NULL
 				);
@@ -610,16 +617,16 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 				_mixListener(
 					(*iter).second, 
 					m_pFrameMix, 
-					realConsumers, nListenerIndex, 
+					nConsumers, nListenerIndex, 
 					bIsSpeaker, (*iter).second->getSessionInfo()->isSpeaking(),
 					m_parListener
 					);
 				// mix() Speaker
 				nListenerIndex++;
 			}
-		} else {
-			nListenerIndex--;
-		}
+		// } else {
+		// 	nListenerIndex--;
+		// }
 		
 		// unlock() frame
 		oFrameVideo->unlock();
