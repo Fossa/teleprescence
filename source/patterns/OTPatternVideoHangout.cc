@@ -480,6 +480,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 					for( refIter = pConsumers->begin() ; refIter != pConsumers->end() ; refIter++ ) {
 						if( (*iter).second->getSessionInfo()->getDisplayName() == (*refIter).second->getSessionInfo()->getDisplayName() ) {
 							if( (*iter).second->getSessionInfo()->isSpeaker() ) {
+								(*iter).second->getSessionInfo()->setSpeaker( false );
 								(*refIter).second->getSessionInfo()->setSpeaker( true );
 							}
 							(*refIter).second->getSessionInfo()->isSharingScreen( true );
@@ -613,6 +614,8 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 				// mix() Speaker
 				nListenerIndex++;
 			}
+		} else {
+			nListenerIndex--;
 		}
 		
 		// unlock() frame
