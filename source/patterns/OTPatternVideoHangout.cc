@@ -416,7 +416,6 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		if( (*iter).second->getSessionInfo()->getSharingScreen() ) {
 			i--;
 			nListenerIndex--;
-			nConsumers--;
 			consumersCount--;
 			OT_DEBUG_WARN( "Continue" );
 			continue;
