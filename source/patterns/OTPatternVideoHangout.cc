@@ -463,6 +463,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		// If no consumer is found and we are last item, set that to speaker
 		if (last_iteration && consumersSpeaker.length() == 0) {
 			OT_DEBUG_WARN("We are last item, no spekar found, setting to this guy");
+			layoutChanged = true;
 			consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
 		}
 
@@ -553,10 +554,15 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 	if (consumersCount != nConsumers || layoutChanged) {
 		consumersCount = nConsumers;
 
-		OT_DEBUG_WARN("LAYOUT CHANGED!");
+		OT_DEBUG_WARN("LAYOUT CHANGED, sending to Casablanca!");
+		std::vector<std::string> consVector;
 		for (int i=0; i<myVector.size(); i++) {
 			std::cout << myVector[i] << ", ";
+			consVector.push_back(myVector[i]);
 		}
+
+		std::unique_ptr<Client> client_api(new node_consumer_impl("http://localhost:3005"));
+		client_api->layout_change(m_oBridgeInfo->getId(), consVector);		
 	}
 
 
