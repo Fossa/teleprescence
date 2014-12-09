@@ -476,6 +476,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 
 				// Add screen sharing info to those who are sharing their screen
 				if( (*iter).second->getSessionInfo()->getVideoType() == "screen-share" ) {
+					nConsumers--;
 					OT_DEBUG_WARN( "Screen sharer detected" );
 					for( refIter = pConsumers->begin() ; refIter != pConsumers->end() ; refIter++ ) {
 						if( (*iter).second->getSessionInfo()->getDisplayName() == (*refIter).second->getSessionInfo()->getDisplayName() ) {
