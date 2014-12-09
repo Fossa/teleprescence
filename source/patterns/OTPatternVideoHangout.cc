@@ -411,9 +411,8 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 	bool layoutChanged = false;
 	_consumers = pConsumers;
 
-	// Always build a fresh consumers vector, dubango dubango
 	for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
-		consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
+			consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
 	}
 
 	for(iter = pConsumers->begin(), i = 0; iter != pConsumers->end(); ++iter, ++i, bIsSpeaker = false)
@@ -450,8 +449,8 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		// First time check only, the first user to join the conversation is set as speaker
 		if( consumersCount == 0 ) {
 			consumersCount = pConsumers->size();
-			// consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
-			consumersSpeaker = consumersVector[0];
+			consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
+			consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
 			(*iter).second->getSessionInfo()->setSpeaker(true);
 
 			layoutChanged = true;
@@ -472,12 +471,11 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			}
 
 			bool speakerFound = false;
-			size_t x;
-			
-			// Force our speaker to be speaker
-			for( iter = pConsumers->begin(),  x = 0; iter != pConsumers->end() ; iter++, x++ ) {
+			for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
+				// Build layout vector
+				consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
 				// Search for our speaker and force him to be speaker
-				if( consumersSpeaker == consumersVector[x] ) {
+				if( consumersSpeaker == (*iter).second->getSessionInfo()->getDisplayName() ) {
 					OT_DEBUG_WARN( "Left/Join Speaker found" );
 					(*iter).second->getSessionInfo()->setSpeaker( true );
 					speakerFound = true;
@@ -627,13 +625,12 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		}
 
 		// Swap listener and speaker in stream
-		// for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
-		// 	if( (*iter).second->getSessionInfo()->getDisplayName() == consumersSpeaker ) {
-		// 		std::swap( pConsumers->begin()->second, (*iter).second );
-		// 		break;
-		// 	}
-		// }
-		
+		for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
+			if( (*iter).second->getSessionInfo()->getDisplayName() == consumersSpeaker ) {
+				std::swap( pConsumers->begin()->second, (*iter).second );
+				break;
+			}
+		}
 		// Debug loop to see what the vector contains
 		// OT_DEBUG_WARN( "Consumers vector: ");
 		// for( std::vector< std::string >::iterator it = consumersVector.begin() ; it != consumersVector.end() ; it++ ) {
