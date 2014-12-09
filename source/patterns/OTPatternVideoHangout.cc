@@ -439,13 +439,10 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			continue;
 		}
 
-
-
-		// Noone is speaker at default
-		//(*iter).second->getSessionInfo()->setSpeaker(false);
-
-
-
+		// Skip stream if it's a webcam sharing stream
+		if ((*iter).second->getSessionInfo()->getSharingScreen()){
+			continue;
+		}
 
 
 
@@ -461,15 +458,17 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		}
 
 		// If no consumer is found and we are last item, set that to speaker
-		if (last_iteration && consumersSpeaker.length() == 0) {
+		if (last_iteration && (consumersSpeaker.length() == 0 || !bSpeakerFound)) {
 			OT_DEBUG_WARN("We are last item, no spekar found, setting to this guy");
+			layoutChanged = true;
 			consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
 		}
 
 		// If we are consumer speaker, we are mixed as speaker
 		if (consumersSpeaker == (*iter).second->getSessionInfo()->getDisplayName()) {
 			(*iter).second->getSessionInfo()->setSpeaker(true);
-			bIsSpeaker = true;			
+			bIsSpeaker = true;		
+			bSpeakerFound = true;	
 		}
 
 
@@ -552,11 +551,30 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 	// If the speaker has changed or a user has left or joined
 	if (consumersCount != nConsumers || layoutChanged) {
 		consumersCount = nConsumers;
+		OT_DEBUG_WARN("LAYOUT CHANGED");
+		
+		std::vector<std::string> webcams;
+		for(iter = pConsumers->begin(), i = 0; iter != pConsumers->end(); ++iter) {
+			if ((*iter).second->getSessionInfo()->getVideoType() == "screen-share")
+				webcams.push_back((*iter).second->getSessionInfo()->getDisplayName());
+		}
+		for(iter = pConsumers->begin(), i = 0; iter != pConsumers->end(); ++iter) {
+			bool exists = std::find(std::begin(webcams), std::end(webcams), (*iter).second->getSessionInfo()->getDisplayName()) != std::end(webcams);
+			if (exists) {
+				(*iter).second->getSessionInfo()->isSharingScreen(true);
+			}
+		}
 
-		OT_DEBUG_WARN("LAYOUT CHANGED!");
+
+
+		std::vector<std::string> consVector;
 		for (int i=0; i<myVector.size(); i++) {
 			std::cout << myVector[i] << ", ";
+			consVector.push_back(myVector[i]);
 		}
+
+		std::unique_ptr<Client> client_api(new node_consumer_impl("http://localhost:3005"));
+		client_api->layout_change(m_oBridgeInfo->getId(), consVector);		
 	}
 
 
