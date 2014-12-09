@@ -411,13 +411,6 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 	bool layoutChanged = false;
 	_consumers = pConsumers;
 
-	for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
-		if( !consumersVector.empty() )
-			consumersVector.clear();
-		
-		consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
-	}
-
 	for(iter = pConsumers->begin(), i = 0; iter != pConsumers->end(); ++iter, ++i, bIsSpeaker = false)
 	{
 		oFrameVideo = (*iter).second->getHeldFrameVideo();
@@ -614,6 +607,14 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 	//***
 	// If the speaker has changed or a user has left or joined
 	if( layoutChanged ) {
+
+		for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
+			if( !consumersVector.empty() )
+				consumersVector.clear();
+			
+			consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
+		}
+
 		// OT_DEBUG_WARN( "Layout changed" );
 		// Find the speaker
 		for( std::vector< std::string >::iterator it = consumersVector.begin() ; it != consumersVector.end() ; it++ ) {
