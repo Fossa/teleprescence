@@ -577,25 +577,27 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		// mix() listener (speaker is also mixed as listener)
 
 		//***
-		if(bIsSpeaker) {
-			_mixSpeaker(
+		if( (*iter).second->getSessionInfo->getVideoType() != "neger" ) {
+			if(bIsSpeaker) {
+				_mixSpeaker(
+						(*iter).second, 
+						m_pFrameMix, 
+						nConsumers,
+						m_parSpeaker,
+						(oStreamer && oStreamer->isOpened()) ? *oStreamer : NULL
+				);
+
+			} else {
+				_mixListener(
 					(*iter).second, 
 					m_pFrameMix, 
-					nConsumers,
-					m_parSpeaker,
-					(oStreamer && oStreamer->isOpened()) ? *oStreamer : NULL
-			);
-
-		} else {
-			_mixListener(
-				(*iter).second, 
-				m_pFrameMix, 
-				nConsumers, nListenerIndex, 
-				bIsSpeaker, (*iter).second->getSessionInfo()->isSpeaking(),
-				m_parListener
-				);
-			// mix() Speaker
-			nListenerIndex++;
+					nConsumers, nListenerIndex, 
+					bIsSpeaker, (*iter).second->getSessionInfo()->isSpeaking(),
+					m_parListener
+					);
+				// mix() Speaker
+				nListenerIndex++;
+			}
 		}
 		
 		// unlock() frame
@@ -634,7 +636,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		// 		break;
 		// 	}
 		// }
-		
+
 		// Debug loop to see what the vector contains
 		// OT_DEBUG_WARN( "Consumers vector: ");
 		// for( std::vector< std::string >::iterator it = consumersVector.begin() ; it != consumersVector.end() ; it++ ) {

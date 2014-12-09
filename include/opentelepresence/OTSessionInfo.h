@@ -52,6 +52,10 @@ public:
 	OT_INLINE void setAudioPosition(float x, float y, float z){ m_AudioPosition.x = x; m_AudioPosition.y = y; m_AudioPosition.z = z;}
 	OT_INLINE const OT3f_t* getAudioPosition(){ return &m_AudioPosition; }
 
+	//***
+	OT_INLINE void setVideoType( std::string strVideoType ) { m_strVideoType = strVideoType };
+	OT_INLINE std::string getVideoType( return m_strVideoType );
+
 	virtual uint64_t getSessionId(OTMediaType_t eMediaType)=0;
 	virtual uint64_t getSipSessionId()=0;
 	virtual uint64_t getConsumerId(OTMediaType_t eMediaType)=0;
@@ -68,6 +72,9 @@ protected:
 	bool m_bSpeaker;
 	bool m_bSpeaking;
 	OT3f_t m_AudioVelocity, m_AudioPosition;
+
+	//***
+	std::string m_strVideoType;
 };
 
 //
