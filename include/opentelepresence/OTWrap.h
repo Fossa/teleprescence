@@ -52,7 +52,7 @@ private:
 class OTSipSessionAV : public OTSipSession, public OTDocStreamerCallback
 {
 public:
-	OTSipSessionAV(CallSession** ppCallSessionToWrap, OTMediaType_t eMediaType, OTObjectWrapper<OTBridgeInfo*> oBridgeInfo, std::string strUserId, std::string strDisplayName, std::string strJobTitle);
+	OTSipSessionAV(CallSession** ppCallSessionToWrap, OTMediaType_t eMediaType, OTObjectWrapper<OTBridgeInfo*> oBridgeInfo, std::string strUserId, std::string strDisplayName, std::string strJobTitle, std::string strVideoType);
 	virtual ~OTSipSessionAV();
 	virtual OT_INLINE const char* getObjectId() { return "OTSipSessionAV"; }
 
