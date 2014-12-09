@@ -472,7 +472,10 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			}
 
 			bool speakerFound = false;
-			for( iter = pConsumers->begin(), size_t x = 0; iter != pConsumers->end() ; iter++, x++ ) {
+			size_t x;
+			
+			// Force our speaker to be speaker
+			for( iter = pConsumers->begin(),  x = 0; iter != pConsumers->end() ; iter++, x++ ) {
 				// Search for our speaker and force him to be speaker
 				if( consumersSpeaker == consumersVector[x] ) {
 					OT_DEBUG_WARN( "Left/Join Speaker found" );
