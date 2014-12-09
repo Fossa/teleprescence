@@ -468,7 +468,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 				// Build layout vector
 				consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
 				// Search for our speaker and force him to be speaker
-				if( consumersSpeaker == (*iter).second->getSessionInfo()->getDisplayName() ) {
+				if( consumersSpeaker == (*iter).second->getSessionInfo()->getDisplayName() && !(*iter).second->getSessionInfo()->getSharingScreen() ) {
 					OT_DEBUG_WARN( "Left/Join Speaker found" );
 					(*iter).second->getSessionInfo()->setSpeaker( true );
 					speakerFound = true;
@@ -483,6 +483,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 								(*iter).second->getSessionInfo()->setSpeaker( false );
 								(*refIter).second->getSessionInfo()->setSpeaker( true );
 							}
+
 							(*refIter).second->getSessionInfo()->isSharingScreen( true );
 							screenSharers.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
 							break;
