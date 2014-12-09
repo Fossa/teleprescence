@@ -405,6 +405,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> >::iterator refIter;
 
 	const size_t nConsumers = pConsumers->size();
+	size_t realConsumers = nConsumers;
 	size_t i;
 
 	//***
@@ -476,7 +477,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 
 				// Add screen sharing info to those who are sharing their screen
 				if( (*iter).second->getSessionInfo()->getVideoType() == "screen-share" ) {
-					nConsumers--;
+					realConsumers--;
 					OT_DEBUG_WARN( "Screen sharer detected" );
 					for( refIter = pConsumers->begin() ; refIter != pConsumers->end() ; refIter++ ) {
 						if( (*iter).second->getSessionInfo()->getDisplayName() == (*refIter).second->getSessionInfo()->getDisplayName() ) {
@@ -600,7 +601,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 				_mixSpeaker(
 						(*iter).second, 
 						m_pFrameMix, 
-						nConsumers,
+						realConsumers,
 						m_parSpeaker,
 						(oStreamer && oStreamer->isOpened()) ? *oStreamer : NULL
 				);
@@ -609,7 +610,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 				_mixListener(
 					(*iter).second, 
 					m_pFrameMix, 
-					nConsumers, nListenerIndex, 
+					realConsumers, nListenerIndex, 
 					bIsSpeaker, (*iter).second->getSessionInfo()->isSpeaking(),
 					m_parListener
 					);
