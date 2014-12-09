@@ -44,6 +44,7 @@ private:
 	std::vector< std::string > screenSharers;
 	size_t consumersCount;
 	size_t prevMixCount;
+	size_t webcamsCount;
 	//Casablanca stefan;
 
 	// Used for set speaker

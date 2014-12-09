@@ -72,6 +72,7 @@ OTPatternVideoHangout::OTPatternVideoHangout(OTObjectWrapper<OTBridgeInfo*> oBri
 	consumersSpeaker = "";
 	_consumers = NULL;
 	prevMixCount = 0;
+	webcamsCount = 0;
 	//OTProxyPluginConsumerVideo* kalle = NULL;
 	// stefan = new node_consumer_impl("http://localhost:3005");
 }
@@ -406,7 +407,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> >::iterator iter;
 	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> >::iterator refIter;
 
-	size_t nConsumers = pConsumers->size();
+	size_t nConsumers = pConsumers->size() - webcamsCount;
 	size_t i;
 
 	//***
@@ -446,7 +447,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 
 		// Skip stream if it's a webcam sharing stream
 		if ((*iter).second->getSessionInfo()->getSharingScreen()){
-			--nConsumers;
+			//--nConsumers;
 			continue;
 		}
 
@@ -544,7 +545,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 				_mixListener(
 					(*iter).second, 
 					m_pFrameMix, 
-					nConsumers, 0, 
+					nConsumers, nListenerIndex, 
 					bIsSpeaker, (*iter).second->getSessionInfo()->isSpeaking(),
 					m_parListener
 					);
@@ -572,6 +573,8 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			if ((*iter).second->getSessionInfo()->getVideoType() == "screen-share")
 				webcams.push_back((*iter).second->getSessionInfo()->getDisplayName());
 		}
+		webcamsCount = webcams.size();
+
 		for(iter = pConsumers->begin(), i = 0; iter != pConsumers->end(); ++iter) {
 			bool exists = std::find(std::begin(webcams), std::end(webcams), (*iter).second->getSessionInfo()->getDisplayName()) != std::end(webcams);
 			if ((*iter).second->getSessionInfo()->getVideoType() == "webcam" && exists) {
