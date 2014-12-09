@@ -628,12 +628,13 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		}
 
 		// Swap listener and speaker in stream
-		for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
-			if( (*iter).second->getSessionInfo()->getDisplayName() == consumersSpeaker ) {
-				std::swap( pConsumers->begin()->second, (*iter).second );
-				break;
-			}
-		}
+		// for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
+		// 	if( (*iter).second->getSessionInfo()->getDisplayName() == consumersSpeaker ) {
+		// 		std::swap( pConsumers->begin()->second, (*iter).second );
+		// 		break;
+		// 	}
+		// }
+		
 		// Debug loop to see what the vector contains
 		// OT_DEBUG_WARN( "Consumers vector: ");
 		// for( std::vector< std::string >::iterator it = consumersVector.begin() ; it != consumersVector.end() ; it++ ) {
