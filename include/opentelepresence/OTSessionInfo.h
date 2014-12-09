@@ -53,8 +53,8 @@ public:
 	OT_INLINE const OT3f_t* getAudioPosition(){ return &m_AudioPosition; }
 
 	//***
-	OT_INLINE void setVideoType( std::string strVideoType ) { m_strVideoType = strVideoType };
-	OT_INLINE std::string getVideoType(){ return m_strVideoType };
+	OT_INLINE void setVideoType( std::string strVideoType ) { m_strVideoType = strVideoType; }
+	OT_INLINE std::string getVideoType(){ return m_strVideoType; }
 
 	virtual uint64_t getSessionId(OTMediaType_t eMediaType)=0;
 	virtual uint64_t getSipSessionId()=0;
