@@ -163,7 +163,7 @@ static inline void _findListenerDest(
 {
 	//***
 	// Adjust consumers
-	nConsumers = (nConsumers < 2 ) ? nConsumers = 1 : nConsumers -= 1;
+	//nConsumers = (nConsumers < 2 ) ? nConsumers = 1 : nConsumers -= 1;
 
 	const size_t nActiveParticipants = TSK_MAX(nConsumers, kMinActiveParticipants4SizeCompute);
 	const size_t nListenerWidth = (nMixFrameWidth / nActiveParticipants);
