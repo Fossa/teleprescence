@@ -41,6 +41,7 @@ private:
 	//***
 	std::vector< std::string > consumersVector;
 	std::string consumersSpeaker;
+	std::vector< std::string > screenSharers;
 	size_t consumersCount;
 	//Casablanca stefan;
 

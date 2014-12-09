@@ -458,9 +458,6 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			// layout changed
 			consumersVector.clear();
 
-			// if( _consumers != NULL )
-			// 	pConsumers = _consumers;
-
 			// First set everyone to speaker false so we only have one speaker
 			for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
 				(*iter).second->getSessionInfo()->setSpeaker( false );
@@ -475,6 +472,21 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 					OT_DEBUG_WARN( "Left/Join Speaker found" );
 					(*iter).second->getSessionInfo()->setSpeaker( true );
 					speakerFound = true;
+				}
+
+				// Add screen sharing info to those who are sharing their screen
+				if( (*iter).second->getSessionInfo()->getVideoType() == "screen-share" ) {
+					OT_DEBUG_WARN( "Screen sharer detected" );
+					for( refIter = pConsumers->begin() ; refIter != pConsumers->end() ; refIter++ ) {
+						if( (*iter).second->getSessionInfo()->getDisplayName() == (*refIter).second->getSessionInfo()->getDisplayName() ) {
+							(*refIter).second->getSessionInfo()->isSharingScreen( true );
+							screenSharers.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
+							break;
+						}
+					}
+				} else {
+					screenSharers.erase(std::remove(screenSharers.begin(), screenSharers.end(), (*iter).second->getSessionInfo()->getDisplayName() ), screenSharers.end() );
+					(*iter).second->getSessionInfo()->isSharingScreen( false );
 				}
 			}
 
@@ -577,7 +589,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		// mix() listener (speaker is also mixed as listener)
 
 		//***
-		if( (*iter).second->getSessionInfo()->getVideoType() != "neger" ) {
+		if( (*iter).second->getSessionInfo()->getSharingScreen() ) {
 			if(bIsSpeaker) {
 				_mixSpeaker(
 						(*iter).second, 
