@@ -569,12 +569,12 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			if ((*iter).second->getSessionInfo()->getVideoType() == "screen-share")
 				webcams.push_back((*iter).second->getSessionInfo()->getDisplayName());
 		}
-		for(iter = pConsumers->begin(), i = 0; iter != pConsumers->end(); ++iter) {
-			bool exists = std::find(std::begin(webcams), std::end(webcams), (*iter).second->getSessionInfo()->getDisplayName()) != std::end(webcams);
-			if (exists) {
-				(*iter).second->getSessionInfo()->isSharingScreen(true);
-			}
-		}
+		// for(iter = pConsumers->begin(), i = 0; iter != pConsumers->end(); ++iter) {
+		// 	bool exists = std::find(std::begin(webcams), std::end(webcams), (*iter).second->getSessionInfo()->getDisplayName()) != std::end(webcams);
+		// 	if (exists) {
+		// 		(*iter).second->getSessionInfo()->isSharingScreen(true);
+		// 	}
+		// }
 
 
 		std::cout << "vector is:\n";
