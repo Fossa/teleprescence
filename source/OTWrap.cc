@@ -450,6 +450,7 @@ int OTSipCallback::OnInviteEvent(const InviteEvent* e)
 							// Added video type (webcam/screen) information
 							char* videoType = const_cast<SipMessage*>(pcMessage)->getSipHeaderValue("TP-VideoType");
 							std::string strVideoType( videoType );
+							std::cout << "Video type is: " << strVideoType;
 
 							std::string strDisplayName(pcDisplayName);
 							std::string strUserId(pcUserId);
