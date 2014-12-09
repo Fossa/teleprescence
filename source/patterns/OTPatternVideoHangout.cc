@@ -409,7 +409,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 
 	//***
 	bool layoutChanged = false;
-	std::vector<std::string> myVector;
+	std::deque<std::string> myVector;
 
 	for(iter = pConsumers->begin(), i = 0; iter != pConsumers->end(); ++iter, ++i, bIsSpeaker = false)
 	{
@@ -517,7 +517,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		// if( !(*iter).second->getSessionInfo()->getSharingScreen() ) {
 			//OT_DEBUG_WARN("Before mix");
 			if(bIsSpeaker) {
-				myVector.insert(myVector.begin(), (*iter).second->getSessionInfo()->getDisplayName());
+				myVector.push_front((*iter).second->getSessionInfo()->getDisplayName());
 				_mixSpeaker(
 						(*iter).second, 
 						m_pFrameMix, 
@@ -550,6 +550,8 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 	//***
 	// If the speaker has changed or a user has left or joined
 	if (consumersCount != nConsumers || layoutChanged) {
+		consumersCount = nConsumers;
+
 		OT_DEBUG_WARN("LAYOUT CHANGED!");
 		for (int i=0; i<myVector.size(); i++) {
 			std::cout << myVector[i] << ", ";
