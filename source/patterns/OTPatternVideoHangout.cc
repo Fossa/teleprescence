@@ -406,7 +406,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> >::iterator iter;
 	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> >::iterator refIter;
 
-	const size_t nConsumers = pConsumers->size();
+	size_t nConsumers = pConsumers->size();
 	size_t i;
 
 	//***
@@ -439,6 +439,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		
 		if(!oFrameVideo)
 		{
+			--nConsumers;
 			continue;
 		}
 
