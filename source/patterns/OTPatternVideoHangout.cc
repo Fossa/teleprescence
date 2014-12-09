@@ -608,10 +608,9 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 	// If the speaker has changed or a user has left or joined
 	if( layoutChanged ) {
 
+		consumersVector.clear();
+
 		for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
-			if( !consumersVector.empty() )
-				consumersVector.clear();
-			
 			consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
 		}
 
