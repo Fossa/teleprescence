@@ -459,9 +459,11 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 
 		// If no consumer is found and we are last item, set that to speaker
 		if (last_iteration && (consumersSpeaker.length() == 0 || !bSpeakerFound)) {
-			OT_DEBUG_WARN("We are last item, no spekar found, setting to this guy");
-			layoutChanged = true;
-			consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
+			if (consumersSpeaker != (*iter).second->getSessionInfo()->getDisplayName()) {
+				OT_DEBUG_WARN("We are last item, no spekar found, setting to this guy");
+				layoutChanged = true;
+				consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
+			}
 		}
 
 		// If we are consumer speaker, we are mixed as speaker
