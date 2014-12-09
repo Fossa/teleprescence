@@ -620,9 +620,9 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			if( *it == consumersSpeaker ) {
 				// Pop the speaker and insert him in the front of the vector
 				int index = std::distance( consumersVector.begin(), it );
-				// consumersVector.erase( consumersVector.begin() + index );
-				// consumersVector.insert( consumersVector.begin(), consumersSpeaker );
-				std::swap( consumersVector[0], consumersVector[ index ] );
+				consumersVector.erase( consumersVector.begin() + index );
+				consumersVector.insert( consumersVector.begin(), consumersSpeaker );
+				// std::swap( consumersVector[0], consumersVector[ index ] );
 				break;
 			}
 		}
