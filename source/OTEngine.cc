@@ -203,7 +203,7 @@ bool OTEngine::start()
 	if(participantsListener->startListener()){
 		participantsListener->setParticipantsListenerCallback([](std::string r)->size_t{
 			OTObjectWrapper<OTBridge*> bridgeWrapper =  getBridge(g_uId, r);
- 			return ((ptr) ? bridgeWrapper->getNumberOfActiveAVCalls() : 0);		
+ 			return ((bridgeWrapper) ? bridgeWrapper->getNumberOfActiveAVCalls() : 0);		
 		});
 
 	}else{
