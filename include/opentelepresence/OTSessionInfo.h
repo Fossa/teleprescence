@@ -57,7 +57,7 @@ public:
 	OT_INLINE std::string getVideoType(){ return m_strVideoType; }
 
 	OT_INLINE void isSharingScreen( bool bSharing ) { m_bSharing = bSharing; }
-	OT_INLINE bool getSharingScreen( return m_bSharing; )
+	OT_INLINE bool getSharingScreen(){ return m_bSharing; }
 
 	virtual uint64_t getSessionId(OTMediaType_t eMediaType)=0;
 	virtual uint64_t getSipSessionId()=0;
