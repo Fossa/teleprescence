@@ -544,7 +544,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 				_mixListener(
 					(*iter).second, 
 					m_pFrameMix, 
-					nConsumers, nListenerIndex, 
+					nConsumers, 0, 
 					bIsSpeaker, (*iter).second->getSessionInfo()->isSpeaking(),
 					m_parListener
 					);
