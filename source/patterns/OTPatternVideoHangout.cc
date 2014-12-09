@@ -573,6 +573,8 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 			bool exists = std::find(std::begin(webcams), std::end(webcams), (*iter).second->getSessionInfo()->getDisplayName()) != std::end(webcams);
 			if ((*iter).second->getSessionInfo()->getVideoType() == "webcam" && exists) {
 				(*iter).second->getSessionInfo()->isSharingScreen(true);
+			} else {
+				(*iter).second->getSessionInfo()->isSharingScreen(false);
 			}
 		}
 
