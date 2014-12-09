@@ -417,6 +417,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		oSessionInfo = dynamic_cast<OTSessionInfoAV*>(*(*iter).second->getSessionInfo());
 		oAVCall = NULL;
 		oStreamer = NULL;
+		bool last_iteration = iter == (--pConsumers->end());
 		//***
 
 		// we must not hold a reference to OTBrige to avoid circular ref
@@ -460,7 +461,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		}
 
 		// If no consumer is found and we are last item, set that to speaker
-		if (iter == pConsumers->end() && consumersSpeaker.length() == 0) {
+		if (last_iteration && consumersSpeaker.length() == 0) {
 			OT_DEBUG_WARN("We are last item, no spekar found, setting to this guy");
 			consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
 		}
