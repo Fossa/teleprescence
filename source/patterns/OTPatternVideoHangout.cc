@@ -404,29 +404,21 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> >::iterator iter;
 	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> >::iterator refIter;
 
-	size_t nConsumers = pConsumers->size();
+	const size_t nConsumers = pConsumers->size();
 	size_t i;
 
 	//***
 	bool layoutChanged = false;
-	_consumers = pConsumers;
+	std::deque<std::string> myVector;
 
 	for(iter = pConsumers->begin(), i = 0; iter != pConsumers->end(); ++iter, ++i, bIsSpeaker = false)
 	{
-		if( (*iter).second->getSessionInfo()->getSharingScreen() ) {
-			i--;
-			nListenerIndex--;
-			consumersCount--;
-			OT_DEBUG_WARN( "Continue" );
-			continue;
-		}
-
 		oFrameVideo = (*iter).second->getHeldFrameVideo();
 		oSessionInfo = dynamic_cast<OTSessionInfoAV*>(*(*iter).second->getSessionInfo());
 		oAVCall = NULL;
 		oStreamer = NULL;
+		bool last_iteration = iter == (--pConsumers->end());
 		//***
-		std::vector< std::string > tempVec;
 
 		// we must not hold a reference to OTBrige to avoid circular ref
 		// comparing ids is the fastest way to check that we have an active doc streamer
@@ -446,127 +438,46 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		{
 			continue;
 		}
-		
+
+		// Skip stream if it's a webcam sharing stream
+		if ((*iter).second->getSessionInfo()->getSharingScreen()){
+			continue;
+		}
 
 
-		//***
-		// First time check only, the first user to join the conversation is set as speaker
-		if( consumersCount == 0 ) {
-			consumersCount = pConsumers->size();
-			consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
+
+
+
+
+
+		// If we are told to be speaker, but mis-matches, Kalle has changed speaker
+		if ((*iter).second->getSessionInfo()->isSpeaker() && consumersSpeaker != (*iter).second->getSessionInfo()->getDisplayName()) {
+			OT_DEBUG_WARN("Kalle changed speaker!");
+			layoutChanged = true;
 			consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
+		}
+
+		// If no consumer is found and we are last item, set that to speaker
+		if (last_iteration && (consumersSpeaker.length() == 0 || !bSpeakerFound)) {
+			OT_DEBUG_WARN("We are last item, no spekar found, setting to this guy");
+			layoutChanged = true;
+			consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
+		}
+
+		// If we are consumer speaker, we are mixed as speaker
+		if (consumersSpeaker == (*iter).second->getSessionInfo()->getDisplayName()) {
 			(*iter).second->getSessionInfo()->setSpeaker(true);
-			layoutChanged = true;
+			bIsSpeaker = true;		
+			bSpeakerFound = true;	
 		}
 
-		// If one user has entered or left the conversation the layout has changed
-		if( consumersCount != nConsumers ) {
-			OT_DEBUG_WARN( "One user has joined or left" );
-			// layout changed
-			consumersVector.clear();
-
-			// First set everyone to speaker false so we only have one speaker
-			for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
-				(*iter).second->getSessionInfo()->setSpeaker( false );
-			}
-
-			bool speakerFound = false;
-			for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
-				// Build layout vector
-				consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
-				// Search for our speaker and force him to be speaker
-				if( consumersSpeaker == (*iter).second->getSessionInfo()->getDisplayName() && !(*iter).second->getSessionInfo()->getSharingScreen() ) {
-					OT_DEBUG_WARN( "Left/Join Speaker found" );
-					(*iter).second->getSessionInfo()->setSpeaker( true );
-					speakerFound = true;
-				}
-
-				// Add screen sharing info to those who are sharing their screen
-				if( (*iter).second->getSessionInfo()->getVideoType() == "screen-share" ) {
-					OT_DEBUG_WARN( "Screen sharer detected" );
-					for( refIter = pConsumers->begin() ; refIter != pConsumers->end() ; refIter++ ) {
-						if( (*iter).second->getSessionInfo()->getDisplayName() == (*refIter).second->getSessionInfo()->getDisplayName() ) {
-							// if( (*iter).second->getSessionInfo()->isSpeaker() ) {
-							// 	(*iter).second->getSessionInfo()->setSpeaker( false );
-							// 	(*refIter).second->getSessionInfo()->setSpeaker( true );
-							// }
-
-							(*refIter).second->getSessionInfo()->isSharingScreen( true );
-							// screenSharers.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
-							break;
-						}
-					}
-				} 
-				else {
-				// 	screenSharers.erase(std::remove(screenSharers.begin(), screenSharers.end(), (*iter).second->getSessionInfo()->getDisplayName() ), screenSharers.end() );
-					(*iter).second->getSessionInfo()->isSharingScreen( false );
-				}
-			}
-
-			// If we haven't found a speaker, we set the first person in the vector to be speaker
-			if( !speakerFound ) {
-				iter = pConsumers->begin();
-				consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
-				(*iter).second->getSessionInfo()->setSpeaker( true );
-			}
-
-			consumersCount = nConsumers;
-			layoutChanged = true;
-			iter = pConsumers->begin();
-		}
-
-		// bool speakerChanged = true;
-		// // Check if the speaker has changed
-		// refIter = iter;
-		// for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
-		// 	if( consumersSpeaker ==  (*iter).second->getSessionInfo()->getDisplayName() ) {
-		// 		OT_DEBUG_WARN( "Speaker remains the same" );
-		// 		speakerChanged = false;
-		// 	}
-		// }
-
-		// if( speakerChanged ) {
-		// 	OT_DEBUG_WARN( "Speaker has changed" );
-		// 	// layout changed
-		// 	consumersVector.clear();
-		// 	layoutChanged = true;
-
-		// 	// Find the new speaker
-		// 	for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
-		// 		// Build layout vector
-		// 		consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
-		// 		if( (*iter).second->getSessionInfo()->isSpeaker() ) {
-		// 			consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
-		// 		}
-		// 	}
-		// }
-
-		// iter = refIter;
-
-		// Check if speaker has changed from outside to see if we need to change the layout
-		// if( consumersSpeaker != (*iter).second->getSessionInfo()->getDisplayName() ) {
-		// 	OT_DEBUG_WARN( "The speaker has changed from client side" );
-		// 	tempVec.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
-		// 	this->setSpeaker( tempVec );
-		// 	consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
-		// 	layoutChanged = true;
-		// }
 
 		// if(!bSpeakerFound && ((bIsSpeaker = (*iter).second->getSessionInfo()->isSpeaker()) || ((i + 1) == nConsumers)))
-		if(!bSpeakerFound && ((bIsSpeaker = (*iter).second->getSessionInfo()->isSpeaker()) ))
-		{
-			//***
-			//Check if the speaker has changed, then we need to inform that the layout needs to change
+		// {
 			
-			if( consumersSpeaker != (*iter).second->getSessionInfo()->getDisplayName() ) {
-				OT_DEBUG_WARN( "Speaker has been changed by client" );
-				consumersSpeaker = (*iter).second->getSessionInfo()->getDisplayName();
-				layoutChanged = true;
-			}
-			
-			bIsSpeaker = true;
-			bSpeakerFound = true;
-		}
+		// 	bIsSpeaker = true;
+		// 	bSpeakerFound = true;
+		// }
 		
 		if(!bMixed) // First time to mix a buffer
 		{
@@ -604,8 +515,9 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 
 		//***
 		// if( !(*iter).second->getSessionInfo()->getSharingScreen() ) {
-			OT_DEBUG_WARN("Before mix");
+			//OT_DEBUG_WARN("Before mix");
 			if(bIsSpeaker) {
+				myVector.push_front((*iter).second->getSessionInfo()->getDisplayName());
 				_mixSpeaker(
 						(*iter).second, 
 						m_pFrameMix, 
@@ -615,6 +527,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 				);
 
 			} else {
+				myVector.push_back((*iter).second->getSessionInfo()->getDisplayName());
 				_mixListener(
 					(*iter).second, 
 					m_pFrameMix, 
@@ -625,63 +538,45 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 				// mix() Speaker
 				nListenerIndex++;
 			}
-			OT_DEBUG_WARN( "After mix " );
+			//OT_DEBUG_WARN( "After mix " );
 		// } else {
 		// 	nListenerIndex--;
 		// }
 		
 		// unlock() frame
 		oFrameVideo->unlock();
-
-	
-	}//for
+	}
 
 	//***
 	// If the speaker has changed or a user has left or joined
-	if( layoutChanged ) {
-
-		consumersVector.clear();
-
-		for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
-			// If the person is sharing his screen, don't send his layout
-			if( !(*iter).second->getSessionInfo()->getSharingScreen() ) {
-				consumersVector.push_back( (*iter).second->getSessionInfo()->getDisplayName() );
+	if (consumersCount != nConsumers || layoutChanged) {
+		consumersCount = nConsumers;
+		OT_DEBUG_WARN("LAYOUT CHANGED");
+		
+		std::vector<std::string> webcams;
+		for(iter = pConsumers->begin(), i = 0; iter != pConsumers->end(); ++iter) {
+			if ((*iter).second->getSessionInfo()->getVideoType() == "screen-share")
+				webcams.push_back((*iter).second->getSessionInfo()->getDisplayName());
+		}
+		for(iter = pConsumers->begin(), i = 0; iter != pConsumers->end(); ++iter) {
+			bool exists = std::find(std::begin(webcams), std::end(webcams), (*iter).second->getSessionInfo()->getDisplayName()) != std::end(webcams);
+			if (exists) {
+				(*iter).second->getSessionInfo()->isSharingScreen(true);
 			}
 		}
 
-		// OT_DEBUG_WARN( "Layout changed" );
-		// Find the speaker
-		for( std::vector< std::string >::iterator it = consumersVector.begin() ; it != consumersVector.end() ; it++ ) {
-			if( *it == consumersSpeaker ) {
-				// Pop the speaker and insert him in the front of the vector
-				int index = std::distance( consumersVector.begin(), it );
-				consumersVector.erase( consumersVector.begin() + index );
-				consumersVector.insert( consumersVector.begin(), consumersSpeaker );
-				// std::swap( consumersVector[0], consumersVector[ index ] );
-				break;
-			}
+
+
+		std::vector<std::string> consVector;
+		for (int i=0; i<myVector.size(); i++) {
+			std::cout << myVector[i] << ", ";
+			consVector.push_back(myVector[i]);
 		}
-
-		// Swap listener and speaker in stream
-		// for( iter = pConsumers->begin() ; iter != pConsumers->end() ; iter++ ) {
-		// 	if( (*iter).second->getSessionInfo()->getDisplayName() == consumersSpeaker ) {
-		// 		std::swap( pConsumers->begin()->second, (*iter).second );
-		// 		break;
-		// 	}
-		// }
-
-		// Debug loop to see what the vector contains
-		// OT_DEBUG_WARN( "Consumers vector: ");
-		// for( std::vector< std::string >::iterator it = consumersVector.begin() ; it != consumersVector.end() ; it++ ) {
-		// 	OT_DEBUG_WARN( *it );
-		// }
-
-		OT_DEBUG_WARN( "Layout changed, sending to Casablanca..." );
 
 		std::unique_ptr<Client> client_api(new node_consumer_impl("http://localhost:3005"));
-		client_api->layout_change( m_oBridgeInfo->getId(), consumersVector );
-		// stefan->layout_change( (*iter).second->getSessionInfo()->getBridgeId(), consumersVector );
+		client_api->layout_change(m_oBridgeInfo->getId(), consVector);		
 	}
+
 
 	if(bMixed)
 	{
