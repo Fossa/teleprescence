@@ -413,6 +413,8 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 	bool layoutChanged = false;
 	std::deque<std::string> myVector;
 	size_t mixCount = 0;
+	OT_DEBUG_WARN("CONSUMERS COUNT:");
+	OT_DEBUG_WARN(nConsumers);
 
 	for(iter = pConsumers->begin(), i = 0; iter != pConsumers->end(); ++iter, ++i, bIsSpeaker = false)
 	{
