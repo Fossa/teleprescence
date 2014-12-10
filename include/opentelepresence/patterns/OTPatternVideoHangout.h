@@ -13,6 +13,7 @@
 //***
 #include <string>
 #include <vector>
+#include <memory>
 #include "../../../casablanca/client.h"
 #include "../../../casablanca/node_consumer_impl.h"
 
