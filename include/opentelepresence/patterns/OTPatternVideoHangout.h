@@ -9,6 +9,7 @@
 
 #include "opentelepresence/patterns/OTPatternVideo.h"
 #include "opentelepresence/OTBridge.h"
+#include "opentelepresence/OTBridgeInfo.h"
 
 //***
 #include <string>
