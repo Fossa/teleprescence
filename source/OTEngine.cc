@@ -1220,7 +1220,7 @@ bool OTEngine::setConfFile(const char* pcConfFileFullPath)
 				OT_DEBUG_INFO_EX(kOTMobuleNameCfg, "%s = %s", pcParamName, pcParamValue);
 				if(tsk_striequals("server", pcParamName))
 				{
-					OT_DEBUG_INFO_EX(kOTMobuleNameCfg, "node stmt");
+					OT_DEBUG_INFO_EX(kOTMobuleNameCfg, "node stmt %s", std::string(pcParamValue).c_str());
 					setNodeURI(tsk_strnullORempty(pcParamValue) ? NODE_URI : pcParamValue);
 					OT_DEBUG_INFO_EX(kOTMobuleNameCfg, "Passed node stmt, node uri = %s", m_oInfo->m_node_uri.c_str());
 				}else{
