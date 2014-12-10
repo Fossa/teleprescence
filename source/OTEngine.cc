@@ -185,7 +185,7 @@ bool OTEngine::start()
 	}
 
 //***
-	OT_DEBUG_INFO_EX("Starting speaker listener with node uri = %s", m_oInfo->m_node_uri);
+	OT_DEBUG_INFO_EX("Starting speaker listener with node uri = %s", m_oInfo->m_node_uri.c_str());
 	speakerListener.reset(new Server(m_oInfo->m_node_uri+std::string("/api/tp/layoutchange")));
 	if(speakerListener->startListener()){
 		speakerListener->setSpeakerListenerCallback([](std::string r, std::string v){
@@ -201,7 +201,7 @@ bool OTEngine::start()
 	}
 	OT_DEBUG_INFO_EX("Successfully started speaker listener");
 
-	OT_DEBUG_INFO_EX("Starting participantsListener listener with node uri = %s", m_oInfo->m_node_uri);
+	OT_DEBUG_INFO_EX("Starting participantsListener listener with node uri = %s", m_oInfo->m_node_uri.c_str());
 	participantsListener.reset(new Server(m_oInfo->m_node_uri+std::string("/api/tp/numberofparticipants")));
 	if(participantsListener->startListener()){
 		participantsListener->setParticipantsListenerCallback([](std::string r)->size_t{
