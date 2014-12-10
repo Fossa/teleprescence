@@ -61,6 +61,7 @@ public:
 		, m_nPresentationSharingLocalPort(OPENTELEPRESENCE_PRESENTATION_SHARING_PROCESS_LOCAL_PORT)
 		, m_strPresentationSharingAppPath(OPENTELEPRESENCE_PRESENTATION_SHARING_APP_PATH)
 		, m_node_uri(NODE_URI)
+		, m_client_uri(NODE_CLIENT_URI)
 
 		, m_bSSLMutualAuth(false)
 	{
@@ -100,6 +101,7 @@ private:
 	bool m_bSSLMutualAuth;
 
 	std::string m_node_uri; /**Kalles*/
+	std::string m_client_uri;
 };
 
 class OTEngine : public OTObject

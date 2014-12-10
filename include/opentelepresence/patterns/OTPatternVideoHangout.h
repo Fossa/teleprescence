@@ -44,6 +44,7 @@ private:
 	size_t consumersCount;
 	//Casablanca stefan;
 
+	std::unique_ptr<Client> client_api;
 	// Used for set speaker
 	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> > *_consumers;
 };

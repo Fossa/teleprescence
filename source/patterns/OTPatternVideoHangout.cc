@@ -61,6 +61,7 @@ int V = (int)(R *  .500000 + G * -.418688 + B * -0.081312 + 128);
 OTPatternVideoHangout::OTPatternVideoHangout(OTObjectWrapper<OTBridgeInfo*> oBridgeInfo)
 : OTPatternVideo(OTPatternType_Hangout, oBridgeInfo)
 , m_pFrameMix(NULL)
+, client_api(new node_consumer_impl(oBridgeInfo->getNodeURI()))
 {
 	OT_ASSERT(oBridgeInfo);
 	
@@ -635,7 +636,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 
 		OT_DEBUG_WARN( "Layout changed, sending to Casablanca..." );
 
-		std::unique_ptr<Client> client_api(new node_consumer_impl("http://localhost:3005"));
+		//std::unique_ptr<Client> client_api(new node_consumer_impl("http://localhost:3005"));
 		client_api->layout_change( m_oBridgeInfo->getId(), consumersVector );
 		// stefan->layout_change( (*iter).second->getSessionInfo()->getBridgeId(), consumersVector );
 	}

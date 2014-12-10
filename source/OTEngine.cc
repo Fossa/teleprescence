@@ -1228,8 +1228,16 @@ bool OTEngine::setConfFile(const char* pcConfFileFullPath)
 					}catch(std::exception e){
 						OT_DEBUG_ERROR_EX(kOTMobuleNameCfg, "Error setting node server %s", e.what());
 					}
-				}else{
-					OT_DEBUG_INFO_EX(kOTMobuleNameCfg, "else stmt");
+				}else if(tsk_striequals("client", pcParamName))
+				{
+					try{
+						OT_DEBUG_INFO_EX(kOTMobuleNameCfg, "client stmt %s", pcParamValue);
+						//setNodeURI(tsk_strnullORempty(pcParamValue) ? NODE_URI : pcParamValue);
+						m_oInfo->m_client_uri = (std::string) pcParamValue;
+						OT_DEBUG_INFO_EX(kOTMobuleNameCfg, "Passed client stmt, client uri = %s", m_oInfo->m_node_uri.c_str());
+					}catch(std::exception e){
+						OT_DEBUG_ERROR_EX(kOTMobuleNameCfg, "Error setting node client %s", e.what());
+					}
 				}
 				// else if(tsk_striequals("server_port", pcParamName))
 				// {
