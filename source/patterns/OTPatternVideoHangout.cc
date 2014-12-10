@@ -8,7 +8,7 @@
 #include "opentelepresence/docstreamer/OTDocStreamer.h"
 #include "opentelepresence/OTWrap.h"
 #include "opentelepresence/OTEngine.h"
-#include "opentelepresence/OTBridgeInfo"
+#include "opentelepresence/OTBridgeInfo.h"
 
 //***
 #include "../../casablanca/client.h"
