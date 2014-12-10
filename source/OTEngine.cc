@@ -1209,6 +1209,7 @@ bool OTEngine::setConfFile(const char* pcConfFileFullPath)
 		// NODE
 		/////////////////
 		else if (tsk_striequals("NODE", (*iterSection)->getName())){
+			OT_DEBUG_INFO("NODE section parsing");
 			const std::list<OTObjectWrapper<OTCfgParam *> >*pParams = (*iterSection)->getParams();
 			/* BEGIN[NODE] */
 			for(iterParam = pParams->begin(); iterParam != pParams->end(); ++iterParam)
