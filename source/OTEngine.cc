@@ -203,9 +203,8 @@ bool OTEngine::start()
 	if(participantsListener->startListener()){
 		participantsListener->setParticipantsListenerCallback([](std::string r)->size_t{
 			OTObjectWrapper<OTBridge*> bridgeWrapper =  getBridge(g_uId, r);
- 			return ((bridgeWrapper) ? bridgeWrapper->getNumberOfActiveAVCalls() : 0);		
+ 			return bridgeWrapper->getNumberOfActiveAVCalls();		
 		});
-
 	}else{
 		OT_DEBUG_ERROR("Failed to start Participants Listener stack");
 		ret = -2;
@@ -1218,8 +1217,6 @@ bool OTEngine::setConfFile(const char* pcConfFileFullPath)
 				if(tsk_striequals("server", pcParamName))
 				{
 					setNodeURI(pcParamValue);
-				}else{
-					std::cout << "server not param name" << std::endl;
 				}
 				// else if(tsk_striequals("server_port", pcParamName))
 				// {
