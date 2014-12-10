@@ -1217,6 +1217,8 @@ bool OTEngine::setConfFile(const char* pcConfFileFullPath)
 				if(tsk_striequals("server", pcParamName))
 				{
 					setNodeURI(pcParamValue);
+				}else{
+					
 				}
 				// else if(tsk_striequals("server_port", pcParamName))
 				// {
