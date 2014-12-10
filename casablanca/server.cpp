@@ -60,11 +60,12 @@ bool Server::startListener(){
 					if (jsonKey == "roomId"){
 
 						if(this->cb2){
-							std::cout << "entering this->cb2.." << std::endl;
+							//std::cout << "entering this->cb2.." << std::endl;
 							noOfParticipants = this->cb2(jsonValue);
-							std::cout << "participantsnumber is: " << noOfParticipants << std::endl;
+							//std::cout << "participantsnumber is: " << noOfParticipants << std::endl;
 							string part_str= to_string(noOfParticipants);
-							req.reply(status_codes::OK,  "{\" NoofParticipants \" : \"  "  + part_str + " \"}" , "application/json");
+							//req.reply(status_codes::OK,  "{\"NoofParticipants\":\"" + part_str + "\"}" , "application/json");
+							req.reply(status_codes::OK, "" + part_str , "text/plain");
 						}
 						else{
 							std::cout << "server.cb2 not set." << std::endl;

@@ -206,7 +206,7 @@ bool OTEngine::start()
 	if(participantsListener->startListener()){
 		participantsListener->setParticipantsListenerCallback([](std::string r)->size_t{
 			OTObjectWrapper<OTBridge*> bridgeWrapper =  getBridge(g_uId, r);
- 			return bridgeWrapper->getNumberOfActiveAVCalls();		
+ 			return ((bridgeWrapper) ? bridgeWrapper->getNumberOfActiveAVCalls() : 0);
 		});
 	}else{
 		OT_DEBUG_ERROR("Failed to start Participants Listener stack");

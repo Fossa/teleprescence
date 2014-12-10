@@ -66,7 +66,7 @@ OTSipSession::~OTSipSession()
 //
 //	OTSipSessionAV
 //
-OTSipSessionAV::OTSipSessionAV(CallSession** ppCallSessionToWrap, OTMediaType_t eMediaType, OTObjectWrapper<OTBridgeInfo*> oBridgeInfo, std::string strUserId, std::string strDisplayName, std::string strJobTitle)
+OTSipSessionAV::OTSipSessionAV(CallSession** ppCallSessionToWrap, OTMediaType_t eMediaType, OTObjectWrapper<OTBridgeInfo*> oBridgeInfo, std::string strUserId, std::string strDisplayName, std::string strJobTitle, std::string strVideoType )
 : OTSipSession((SipSession **)ppCallSessionToWrap, oBridgeInfo)
 , m_eMediaType(eMediaType)
 {
@@ -74,6 +74,7 @@ OTSipSessionAV::OTSipSessionAV(CallSession** ppCallSessionToWrap, OTMediaType_t 
 	m_oInfo->setDisplayName(strDisplayName);
 	m_oInfo->setUserId(strUserId);
 	m_oInfo->setJobTitle(strJobTitle);
+	m_oInfo->setVideoType( strVideoType );
 }
 
 OTSipSessionAV::~OTSipSessionAV()
@@ -445,11 +446,17 @@ int OTSipCallback::OnInviteEvent(const InviteEvent* e)
 							//const char* pcDisplayName = username.c_str();
 							const char* pcUserId = pcWrappedMessage->From->uri->user_name;
 							char* pJobTitle = const_cast<SipMessage*>(pcMessage)->getSipHeaderValue("TP-JobTitle");
+							//***
+							// Added video type (webcam/screen) information
+							char* videoType = const_cast<SipMessage*>(pcMessage)->getSipHeaderValue("TP-VideoType");
+							std::string strVideoType( videoType );
+							std::cout << "Video type is: " << strVideoType;
+
 							std::string strDisplayName(pcDisplayName);
 							std::string strUserId(pcUserId);
 							std::string strJobTitle(pJobTitle ? pJobTitle : "");
 
-							OTObjectWrapper<OTSipSessionAV*> oAVCall = new OTSipSessionAV(&pCallSession, eMediaType, oBridge->getInfo(), pcUserId, strDisplayName, strJobTitle);
+							OTObjectWrapper<OTSipSessionAV*> oAVCall = new OTSipSessionAV(&pCallSession, eMediaType, oBridge->getInfo(), pcUserId, strDisplayName, strJobTitle, strVideoType );
 							
 							char* pAudioPosition = const_cast<SipMessage*>(pcMessage)->getSipHeaderValue("TP-AudioPosition");
 							char* pAudioVelocity = const_cast<SipMessage*>(pcMessage)->getSipHeaderValue("TP-AudioVelocity");
@@ -484,6 +491,7 @@ int OTSipCallback::OnInviteEvent(const InviteEvent* e)
 								}
 							}
 
+							TSK_FREE( videoType );
 							TSK_FREE(pJobTitle);
 							TSK_FREE(pAudioPosition);
 							TSK_FREE(pAudioVelocity);

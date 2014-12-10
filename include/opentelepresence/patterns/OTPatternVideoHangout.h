@@ -42,7 +42,10 @@ private:
 	//***
 	std::vector< std::string > consumersVector;
 	std::string consumersSpeaker;
+	std::vector< std::string > screenSharers;
 	size_t consumersCount;
+	size_t prevMixCount;
+	size_t webcamsCount;
 	//Casablanca stefan;
 
 	std::unique_ptr<Client> client_api;

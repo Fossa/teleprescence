@@ -23,6 +23,8 @@ OTSessionInfo::OTSessionInfo(OTMediaType_t eMediaType, OTObjectWrapper<OTBridgeI
 	m_oBridgeInfo = oBridgeInfo;
 	m_eRole = OTRole_Participant;
 	m_bSpeaker = false;
+	m_strVideoType = "";
+	m_bSharing = false;
 }
 
 OTSessionInfo::~OTSessionInfo()
