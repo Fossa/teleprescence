@@ -562,6 +562,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		oFrameVideo->unlock();
 	}
 
+	std::cout << "consumers:" << nConsumers << std::endl;
 	//***
 	// If the speaker has changed or a user has left or joined
 	if (mixCount != prevMixCount || layoutChanged || (nConsumers == 0 && nConsumers != mixCount)) {
