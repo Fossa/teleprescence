@@ -87,6 +87,7 @@ OTPatternVideoHangout::~OTPatternVideoHangout()
 	// delete stefan;
 	//delete kalle;
 	OT_DEBUG_INFO("*** OTPatternVideoHangout destroyed ***");
+	std::cout << "ANAL DESTRUCTOR CALLED!\n";
 }
 
 #if OPENTELEPRESENCE_UNDER_WINDOWS
