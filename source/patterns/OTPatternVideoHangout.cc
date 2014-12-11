@@ -87,7 +87,6 @@ OTPatternVideoHangout::~OTPatternVideoHangout()
 	// delete stefan;
 	//delete kalle;
 	OT_DEBUG_INFO("*** OTPatternVideoHangout destroyed ***");
-	std::cout << "ANAL DESTRUCTOR CALLED!\n";
 }
 
 #if OPENTELEPRESENCE_UNDER_WINDOWS
@@ -372,6 +371,7 @@ static void _mixListener(
 
 OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> >*pConsumers, void** ppDstBuffer, uint32_t *pDstBufferSize)
 {
+	std::cout << "mix() called " << pConsumers->size() << std::endl;
 	bool bMixed = false, bSpeakerFound = false, bIsSpeaker = false;
 	uint32_t nWidth = m_oBridgeInfo->getVideoWidth(), nHeight = m_oBridgeInfo->getVideoHeight();
 	uint32_t nMaxBufferSize = (nWidth * nHeight * 3) >> 1;
