@@ -65,6 +65,7 @@ bool Server::startListener(){
 							//std::cout << "participantsnumber is: " << noOfParticipants << std::endl;
 							string part_str= to_string(noOfParticipants);
 							//req.reply(status_codes::OK,  "{\"NoofParticipants\":\"" + part_str + "\"}" , "application/json");
+							std::cout << "Number of participants is: (uint) " << noOfParticipants << " string: " << part_str << std::endl;
 							req.reply(status_codes::OK, "" + part_str , "text/plain");
 						}
 						else{
