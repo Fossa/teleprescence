@@ -566,6 +566,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 	// If the speaker has changed or a user has left or joined
 	if (mixCount != prevMixCount || layoutChanged) {
 		//consumersCount = nConsumers;
+		prevMixCount = mixCount;
 		OT_DEBUG_WARN("LAYOUT CHANGED");
 		
 		std::vector<std::string> webcams;
@@ -595,8 +596,6 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		std::unique_ptr<Client> client_api(new node_consumer_impl("http://localhost:3005"));
 		client_api->layout_change(m_oBridgeInfo->getId(), consVector);		
 	}
-
-	prevMixCount = mixCount;
 
 
 	if(bMixed)
