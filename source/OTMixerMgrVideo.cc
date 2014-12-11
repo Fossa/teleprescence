@@ -502,6 +502,7 @@ done:
 	if(!bHasAtLeastOneValidSession)
 	{
 		OT_DEBUG_INFO("Pausing the 'video' mixer because no active session left...");
+		std::cout << "NEGERJÄVEL: " << oSessionInfoAudioVideo->getBridgeId() << std::endl;
 		pause();
 	}
 
