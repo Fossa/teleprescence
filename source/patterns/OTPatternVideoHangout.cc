@@ -86,6 +86,7 @@ OTPatternVideoHangout::~OTPatternVideoHangout()
 
 	// delete stefan;
 	//delete kalle;
+	OT_DEBUG_WARN("======================================== STOR KUK I MUMINDALEN ==============================");
 	OT_DEBUG_INFO("*** OTPatternVideoHangout destroyed ***");
 }
 
