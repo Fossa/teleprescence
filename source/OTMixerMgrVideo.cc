@@ -395,6 +395,8 @@ next_iter_cons_1:
 	// do nothing if there is a active consumer
 	if(!bHasAtLeastOneValidSession)
 	{
+		OT_DEBUG_WARN("=====================================HEJ HEJ HEJ");
+		std::cout << "NEGERJÄVEL: " << oSessionInfoAudioVideo->getBridgeId() << std::endl;
 		goto done;
 	}
 
@@ -503,7 +505,6 @@ done:
 	if(!bHasAtLeastOneValidSession)
 	{
 		OT_DEBUG_INFO("Pausing the 'video' mixer because no active session left...");
-		std::cout << "NEGERJÄVEL: " << oSessionInfoAudioVideo->getBridgeId() << std::endl;
 		pause();
 	}
 
