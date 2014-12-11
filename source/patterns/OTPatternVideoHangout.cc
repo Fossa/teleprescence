@@ -566,7 +566,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 	// If the speaker has changed or a user has left or joined
 	if (mixCount != prevMixCount || layoutChanged || (nConsumers == 0 && nConsumers != mixCount)) {
 		//consumersCount = nConsumers;
-		prevMixCount = mixCount;
+		prevMixCount = (nConsumers==0 ? 0 : mixCount);
 		OT_DEBUG_WARN("LAYOUT CHANGED");
 		
 		std::vector<std::string> webcams;
