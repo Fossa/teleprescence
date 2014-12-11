@@ -357,7 +357,6 @@ int OTMixerMgrVideo::rtcpOnEventCb(const void* pcUsrData, enum tmedia_rtcp_event
 
 int OTMixerMgrVideo::mixAndSend()
 {
-	OT_DEBUG_WARN("mixAndSend()");
 	std::map<uint64_t, OTObjectWrapper<OTProxyPluginConsumerVideo*> >::const_iterator iter_cons;
 	std::map<uint64_t, OTObjectWrapper<OTProxyPluginProducerVideo*> >::const_iterator iter_prod;
 	
