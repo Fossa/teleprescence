@@ -447,6 +447,7 @@ OTObjectWrapper<OTFrameVideo *> OTPatternVideoHangout::mix(std::map<uint64_t, OT
 		
 		if(!oFrameVideo)
 		{
+			--nConsumers;
 			continue;
 		}
 
